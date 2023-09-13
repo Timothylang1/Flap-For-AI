@@ -2,7 +2,8 @@ import edu.macalester.graphics.Image;
 
 public class Bird extends Image {
 
-    private static final double GRAVITY = 0.8;
+    private static final double GRAVITY = Constants.GRAVITY;
+    private static final double JUMPSPEED = -Constants.JUMPSPEED;
     private double speed = 0;
 
     public Bird() {
@@ -12,7 +13,7 @@ public class Bird extends Image {
     }
 
     public void rise() {
-        speed = -10;
+        speed = JUMPSPEED;
         moveBy(0, speed);
     }
 
