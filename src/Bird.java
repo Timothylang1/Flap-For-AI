@@ -1,3 +1,4 @@
+import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Image;
 
 public class Bird extends Image {
@@ -5,11 +6,12 @@ public class Bird extends Image {
     private double speed = 0;
     private PipeHandler pipes;
 
-    public Bird(PipeHandler pipes) {
+    public Bird(PipeHandler pipes, CanvasWindow canvas) {
         super(0, 0, "Final/Bird.png");
         this.pipes = pipes;
         setScale(Constants.BIRD_SCALE);
         setCenter(Constants.STARTING_BIRD_X, Constants.STARTING_BIRD_Y);
+        canvas.add(this);
     }
 
     /*

@@ -24,6 +24,7 @@ public class Constants {
     public static final double LOWER_BACKGROUND_HEIGHT = new Image(0, 0, "Final/LowerBackground.png").getHeight() * BACKGROUND_SCALE;
     public static final int CANVAS_HEIGHT = (int) (UPPER_BACKGROUND_HEIGHT + new Image(0, 0, "Final/LowerBackground.png").getHeight() * BACKGROUND_SCALE);
     public static final double PIPE_SCALE = 0.2 * ULTIMATE_SCALE;
+    public static final double PIPE_WIDTH = new Image(0, 0, "Final/Pipe.png").getWidth() * PIPE_SCALE;
     public static final double BIRD_SCALE = 0.12 * ULTIMATE_SCALE;
     public static final double BIRD_SIZE_Y = new Image(0, 0, "Final/Bird.png").getHeight() * BIRD_SCALE;
     public static final double BIRD_SIZE_X = new Image(0, 0, "Final/Bird.png").getWidth() * BIRD_SCALE;
