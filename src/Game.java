@@ -29,9 +29,9 @@ public class Game {
 
     private void restartGame() {
         canvas.removeAll();
-        PipeHandler pipes = new PipeHandler();
-        Background back = new Background(canvas, pipes);
-        Bird bird = new Bird(pipes, canvas);
+        pipes = new PipeHandler();
+        back = new Background(pipes, canvas);
+        bird = new Bird(pipes, canvas);
     }
 
     public static void main(String[] args) {

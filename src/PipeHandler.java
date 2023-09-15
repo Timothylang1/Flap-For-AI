@@ -86,9 +86,9 @@ public class PipeHandler {
         }
         pipe_images.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
         // Updates which pipe is currently the potential one for birds to collide into
-        if (lower_pipe.getCenter().getX() + Constants.PIPE_WIDTH < Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2) {
-            lower_pipe = pipe_images.get(pipe_images.index(lower_pipe) + 2);
-            upper_pipe = pipe_images.get(pipe_images.index(upper_pipe) + 2);
+        if (lower_pipe.getCenter().getX() + Constants.PIPE_WIDTH / 2 < Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2) {
+            lower_pipe = pipe_images.get(pipe_images.indexOf(lower_pipe) + 2);
+            upper_pipe = pipe_images.get(pipe_images.indexOf(upper_pipe) + 2);
         }
     }
 }

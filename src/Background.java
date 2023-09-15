@@ -12,7 +12,7 @@ public class Background {
     private ArrayList<Image> lowimages = new ArrayList<Image>(); 
     private final double BG_IMAGE_WIDTH = new Image(0, 0, "Final/UpperBackground.png").getWidth() * Constants.BACKGROUND_SCALE;
 
-    public Background(CanvasWindow canvas, PipeHandler pipes) {
+    public Background(PipeHandler pipes, CanvasWindow canvas) {
         // We then add the graphicsgroups in the order we to see them (background, pipes, then foreground)
         canvas.add(upperImages);
         pipes.addPipesGroup(canvas);
