@@ -6,12 +6,11 @@ public class Bird extends Image {
     private double speed = 0;
     private PipeHandler pipes;
 
-    public Bird(PipeHandler pipes, CanvasWindow canvas) {
+    public Bird(PipeHandler pipes) {
         super(0, 0, "Final/Bird.png");
         this.pipes = pipes;
         setScale(Constants.BIRD_SCALE);
         setCenter(Constants.STARTING_BIRD_X, Constants.STARTING_BIRD_Y);
-        canvas.add(this);
     }
 
     /*
@@ -37,5 +36,9 @@ public class Bird extends Image {
     public void rise() {
         speed = -Constants.JUMPSPEED;
         moveBy(0, speed);
+    }
+
+    public void addBird(CanvasWindow canvas) {
+        canvas.add(this);
     }
 }

@@ -7,12 +7,14 @@ public class Game {
     private PipeHandler pipes;
     private Background back;
     private Bird bird;
+    private Score score;
 
     public Game() {
         restartGame();
         canvas.animate(() -> {
             back.move();
             pipes.move();
+            score.updateScore(); 
             if (!bird.move()) {
                 restartGame();
             }
@@ -28,10 +30,18 @@ public class Game {
     }
 
     private void restartGame() {
-        canvas.removeAll();
         pipes = new PipeHandler();
-        back = new Background(pipes, canvas);
-        bird = new Bird(pipes, canvas);
+        score = new Score(pipes);
+        back = new Background();
+        bird = new Bird(pipes);
+
+        canvas.removeAll();
+        back.addUpperBackground(canvas);
+        pipes.addPipesGroup(canvas);
+        back.addLowerBackground(canvas);
+        bird.addBird(canvas);
+        score.addScore(canvas);
+        
     }
 
     public static void main(String[] args) {

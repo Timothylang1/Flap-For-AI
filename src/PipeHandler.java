@@ -85,10 +85,17 @@ public class PipeHandler {
             createPipe();
         }
         pipe_images.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
-        // Updates which pipe is currently the potential one for birds to collide into
+        // Updates which pipe is currently the potential one for birds to collide into. If the birds successfully cross, then we update the score
         if (lower_pipe.getCenter().getX() + Constants.PIPE_WIDTH / 2 < Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2) {
             lower_pipe = pipe_images.get(pipe_images.indexOf(lower_pipe) + 2);
             upper_pipe = pipe_images.get(pipe_images.indexOf(upper_pipe) + 2);
         }
+    }
+
+    /*
+     * Returns the current pipe that the birds can collide into
+     */
+    public Image getCurrentPipe() {
+        return upper_pipe;
     }
 }

@@ -12,12 +12,7 @@ public class Background {
     private ArrayList<Image> lowimages = new ArrayList<Image>(); 
     private final double BG_IMAGE_WIDTH = new Image(0, 0, "Final/UpperBackground.png").getWidth() * Constants.BACKGROUND_SCALE;
 
-    public Background(PipeHandler pipes, CanvasWindow canvas) {
-        // We then add the graphicsgroups in the order we to see them (background, pipes, then foreground)
-        canvas.add(upperImages);
-        pipes.addPipesGroup(canvas);
-        canvas.add(lowerImages);
-
+    public Background() {
         double x = 0;
         while (x < Constants.CANVAS_WIDTH) {
             // Generate upper background
@@ -58,5 +53,13 @@ public class Background {
         }
         upimages.forEach(x -> x.moveBy(-Constants.GAMESPEED * 0.5, 0));
         lowimages.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
+    }
+
+    public void addUpperBackground(CanvasWindow canvas) {
+        canvas.add(upperImages);
+    }
+
+    public void addLowerBackground(CanvasWindow canvas) {
+        canvas.add(lowerImages);
     }
 }
