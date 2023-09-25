@@ -11,6 +11,7 @@ public class Game {
 
     public Game() {
         restartGame();
+        System.out.println(canvas.getWidth() + " " + canvas.getHeight());
         canvas.animate(() -> {
             back.move();
             pipes.move();
