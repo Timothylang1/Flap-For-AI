@@ -1,3 +1,4 @@
+package Game;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Image;

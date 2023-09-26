@@ -1,3 +1,4 @@
+package Game;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Image;
 
@@ -35,10 +36,13 @@ public class Bird extends Image {
 
     public void rise() {
         speed = -Constants.JUMPSPEED;
-        moveBy(0, speed);
     }
 
     public void addBird(CanvasWindow canvas) {
         canvas.add(this);
+    }
+
+    public double getSpeed() {
+        return speed;
     }
 }

@@ -1,3 +1,4 @@
+package Game;
 import edu.macalester.graphics.Image;
 
 public class Constants {

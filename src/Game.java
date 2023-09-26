@@ -1,3 +1,4 @@
+import Game.*;
 import edu.macalester.graphics.*;
 
 

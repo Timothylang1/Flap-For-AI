@@ -1,59 +1,28 @@
 package NEAT;
+
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Neuron {
-    private ArrayList<Double> inputs;
-    private ArrayList<Double> weights;
-    private double bias;
-    private double output;
+    public ArrayList<Double> weights = new ArrayList<>();
+    public double bias;
+    private ActivationFunction function;
+    private static Random rand = new Random();
 
-    public Neuron(ArrayList<Double> inputs, ArrayList<Double> weights, Double bias) {
-        output = 0.0;
-        if (inputs.size() == weights.size()) {
-            for (int i = 0; i < inputs.size(); i++) {
-                output += inputs.get(i) * weights.get(i);
-            }
-            output += bias;
-            System.out.println(output);
-        } else {
-            System.out.println("!!!!YOUR NUMBER OF INPUTS DON'T MATCH NUMBER OF WEIGHTS!!!!");
+    public Neuron(ActivationFunction function, int numOfWeights) {
+        this.function = function;
+        for (int i = 0; i < numOfWeights; i++) {
+            weights.add(rand.nextDouble() * 2 - 1); // Generates a number between -1 and 1
         }
+        bias = rand.nextDouble() * 2 - 1;
+
     }
 
-    public Double getOutput() {
-        return output;
-    }
-
-    public static void main(String[] args) {
-        ArrayList<Double> inputs = new ArrayList<Double>();
-        ArrayList<Double> weights1 = new ArrayList<Double>();
-        ArrayList<Double> weights2 = new ArrayList<Double>();
-        ArrayList<Double> weights3 = new ArrayList<Double>();
-
-
-        inputs.add(1.0);
-        inputs.add(2.0);
-        inputs.add(3.0);
-        inputs.add(2.5);
-
-        weights1.add(0.2);
-        weights1.add(0.8);
-        weights1.add(-0.5);
-        weights1.add(1.0);
-
-        weights2.add(0.5);
-        weights2.add(-0.91);
-        weights2.add(0.26);
-        weights2.add(-0.5);
-
-        weights3.add(-0.26);
-        weights3.add(-0.27);
-        weights3.add(0.17);
-        weights3.add(0.87 );
-
-        Neuron n1 = new Neuron(inputs, weights1, 2.0);
-        Neuron n2 = new Neuron(inputs, weights2, 3.0);
-        Neuron n3 = new Neuron(inputs, weights3, 0.5);        
-        
+    public double getOutput(ArrayList<Double> inputs) {
+        double output = 0;
+        for (int i = 0; i < inputs.size(); i++) {
+            output += inputs.get(i) * weights.get(i);
+        }
+        return function.Function(output + bias); // Add bias, then run through activation function
     }
 }
