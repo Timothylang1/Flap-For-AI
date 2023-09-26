@@ -10,6 +10,8 @@ public class Constants {
     public static final double GAMESPEED = 1.7; // How fast pipes are incoming
     public static final double GRAVITY = 0.5; // How fast the bird falls
     public static final double JUMPSPEED = 6; // How fast the bird rises
+
+    // Difficulty
     public static final double VERTICAL_DISTANCE_BETWEEN_PIPES = 90 * ULTIMATE_SCALE;    
     public static final double HORIZONTAL_DISTANCE_BETWEEN_PIPES = 145 * ULTIMATE_SCALE;
 

@@ -102,6 +102,6 @@ public class PipeHandler {
      * Returns the current pipe that the birds can collide into
      */
     public Image getCurrentPipe() {
-        return upper_pipe;
+        return lower_pipe;
     }
 }

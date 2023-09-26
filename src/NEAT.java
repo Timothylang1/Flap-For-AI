@@ -36,7 +36,7 @@ public class NEAT {
         NeuralNetwork best_neural_network = networks.get(0);
         for (NeuralNetwork network : networks) {
             int fitness = network.reset();
-            if (best_fitness < fitness) {
+            if (best_fitness <= fitness) {
                 best_fitness = fitness;
                 best_neural_network = network;
             }

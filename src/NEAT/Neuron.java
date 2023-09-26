@@ -28,9 +28,9 @@ public class Neuron {
     public Neuron(int num_of_weights, ActivationFunction function) {
         this.function = function;
         for (int i = 0; i < num_of_weights; i++) {
-            weights.add(rand.nextDouble() * 2 - 1); // Slightly change and vary the weights
+            weights.add(rand.nextDouble() * 0.25 - 0.125); // Slightly change and vary the weights
         }
-        bias = bias + rand.nextDouble() * 2 - 1;
+        bias = bias + rand.nextDouble() * 0.25 - 0.125;
     }
 
     /*
@@ -39,9 +39,9 @@ public class Neuron {
     public Neuron(ArrayList<Double> input_weights, double bias, ActivationFunction function) {
         this.function = function;
         for (int i = 0; i < input_weights.size(); i++) {
-            weights.add(input_weights.get(i) + rand.nextDouble() * 2 - 1); // Slightly change and vary the weights
+            weights.add(input_weights.get(i) + rand.nextDouble() * 0.25 - 0.125); // Slightly change and vary the weights
         }
-        bias = bias + rand.nextDouble() * 2 - 1;
+        bias = bias + rand.nextDouble() * 0.25 - 0.125;
     }
 
     public void calculateOutput() {

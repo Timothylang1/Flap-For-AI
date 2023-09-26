@@ -10,7 +10,7 @@ public class Game {
     private final Score score = new Score(pipes);
     private final NEAT neat;
 
-    private static final int TOTAL_BIRDS = 20;
+    private static final int TOTAL_BIRDS = 100;
 
     public Game() {
         // Add objects to canvas in correct order
