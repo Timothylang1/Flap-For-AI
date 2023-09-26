@@ -4,46 +4,43 @@ import edu.macalester.graphics.*;
 
 public class Game {    
 
-    private CanvasWindow canvas = new CanvasWindow("Flap For AI", Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
-    private PipeHandler pipes;
-    private Background back;
-    private Bird bird;
-    private Score score;
+    private final CanvasWindow canvas = new CanvasWindow("Flap For AI", Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
+    private final PipeHandler pipes = new PipeHandler();
+    private final Background back = new Background();
+    private final Score score = new Score(pipes);
+    private final NEAT neat;
+
+    private static final int TOTAL_BIRDS = 20;
 
     public Game() {
-        restartGame();
-        System.out.println(canvas.getWidth() + " " + canvas.getHeight());
+        // Add objects to canvas in correct order
+        back.addUpperBackground(canvas);
+        pipes.addPipesGroup(canvas);
+        back.addLowerBackground(canvas);
+        score.addScore(canvas);
+        
+        // NEAT needs to be created inside the constructor so that all the birds are visible when we add them to the canvas last
+        neat = new NEAT(pipes, canvas, TOTAL_BIRDS);
+
         canvas.animate(() -> {
             back.move();
             pipes.move();
-            score.updateScore(); 
-            if (!bird.move()) {
+            score.updateScore();
+            if (!neat.move()) { // If all the birds have died (i.e. move returns false), then we reset the game and the neural networks
                 restartGame();
             }
         });
 
-        canvas.onKeyDown(keys -> {
-            bird.rise();
-        });
-
-        canvas.onClick(point -> {
-            System.out.println(point.getPosition());
-        });
+        // canvas.onClick(point -> {
+        //     System.out.println(point.getPosition());
+        // });
     }
 
     private void restartGame() {
-        pipes = new PipeHandler();
-        score = new Score(pipes);
-        back = new Background();
-        bird = new Bird(pipes);
-
-        canvas.removeAll();
-        back.addUpperBackground(canvas);
-        pipes.addPipesGroup(canvas);
-        back.addLowerBackground(canvas);
-        bird.addBird(canvas);
-        score.addScore(canvas);
-        
+        back.reset();
+        pipes.reset();
+        score.reset();
+        neat.reset();
     }
 
     public static void main(String[] args) {

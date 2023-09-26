@@ -2,18 +2,20 @@
 
 import java.util.ArrayList;
 
-import Game.Bird;
 import Game.PipeHandler;
-import NEAT.ActivationFunction;
-import NEAT.Layer;
 import edu.macalester.graphics.CanvasWindow;
 
 public class NEAT {
 
-    private static final int TOTAL_BIRDS = 10;
+    private final int TOTAL_BIRDS;
     private ArrayList<NeuralNetwork> networks = new ArrayList<>();
+    private final PipeHandler pipes;
+    private final CanvasWindow canvas;
 
-    public NEAT(PipeHandler pipes, CanvasWindow canvas) {
+    public NEAT(PipeHandler pipes, CanvasWindow canvas, int total_birds) {
+        this.pipes = pipes;
+        this.canvas = canvas;
+        TOTAL_BIRDS = total_birds;
         for (int bird = 0; bird < TOTAL_BIRDS; bird++) {
             networks.add(new NeuralNetwork(pipes, canvas));
         }
@@ -23,17 +25,34 @@ public class NEAT {
         boolean birds_still_alive = false;
         for (NeuralNetwork network : networks) {
             boolean still_alive = network.moveBird();
-            if (!birds_still_alive && still_alive) birds_still_alive = true; 
+            if (still_alive) birds_still_alive = true; // If one bird is still alive, then we don't reset until that bird dies
         }
-        if (!birds_still_alive) {
-            reset();
-            return false;
-        }
-        return true;
+        return birds_still_alive;
     }
 
-    private void reset() {
-        
+    public void reset() {
+        // First, get the best fitness from the neuralNetworks
+        int best_fitness = 0;
+        NeuralNetwork best_neural_network = networks.get(0);
+        for (NeuralNetwork network : networks) {
+            int fitness = network.reset();
+            if (best_fitness < fitness) {
+                best_fitness = fitness;
+                best_neural_network = network;
+            }
+        }
+
+        // Remove all the networks and birds except the best fitness one
+        for (NeuralNetwork network : networks) {
+            if (!network.equals(best_neural_network)) network.removeBird(canvas);
+        }
+        networks.clear();
+        networks.add(best_neural_network);
+
+        // Then create mutations off of that neural network, but we will keep the original one in case the rest are worse than the original
+        for (int i = 0; i < TOTAL_BIRDS - 1; i++) {
+            networks.add(new NeuralNetwork(pipes, canvas, best_neural_network));
+        }
     }
 
 

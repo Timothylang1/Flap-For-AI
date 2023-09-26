@@ -4,13 +4,18 @@ import edu.macalester.graphics.Image;
 
 public class Bird extends Image {
 
-    private double speed = 0;
+    private double speed;
     private PipeHandler pipes;
 
     public Bird(PipeHandler pipes) {
         super(0, 0, "Final/Bird.png");
         this.pipes = pipes;
         setScale(Constants.BIRD_SCALE);
+        reset();
+    }
+
+    public void reset() {
+        speed = 0;
         setCenter(Constants.STARTING_BIRD_X, Constants.STARTING_BIRD_Y);
     }
 
@@ -34,7 +39,7 @@ public class Bird extends Image {
         return true;
     }
 
-    public void rise() {
+    public void jump() {
         speed = -Constants.JUMPSPEED;
     }
 

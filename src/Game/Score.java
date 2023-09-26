@@ -16,6 +16,11 @@ public class Score extends GraphicsText {
         setFontSize(50);
     }
 
+    public void reset() {
+        score = 0;
+        setText(Integer.toString(score));
+    }
+
     public void updateScore() {
         Image currentPipe = pipes.getCurrentPipe();
         if (currentPipe.getCenter().getX() <= Constants.STARTING_BIRD_X && !currentPipe.equals(previouspipe)) { // The second check is to ensure that we're not updating the score continuously after the pipes pass
@@ -27,9 +32,5 @@ public class Score extends GraphicsText {
 
     public void addScore(CanvasWindow canvas) {
         canvas.add(this);
-    }
-
-    public int getScore() {
-        return score;
     }
 }

@@ -14,6 +14,14 @@ public class Background {
     private final double BG_IMAGE_WIDTH = new Image(0, 0, "Final/UpperBackground.png").getWidth() * Constants.BACKGROUND_SCALE;
 
     public Background() {
+        reset();
+    }
+
+    public void reset() {
+        upperImages.removeAll();
+        lowerImages.removeAll();
+        upimages.clear();
+        lowimages.clear();
         double x = 0;
         while (x < Constants.CANVAS_WIDTH) {
             // Generate upper background

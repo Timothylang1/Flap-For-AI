@@ -17,6 +17,12 @@ public class PipeHandler {
     private Image upper_pipe;
     
     public PipeHandler() {
+        reset();
+    }
+
+    public void reset() {
+        pipes.removeAll();
+        pipe_images.clear();
         double x = 0;
         while (x < Constants.CANVAS_WIDTH) {
             // Generate pipes
@@ -28,7 +34,6 @@ public class PipeHandler {
         // Assign the closest pipe as the main pipe that birds can collide into
         lower_pipe = pipe_images.get(0);
         upper_pipe = pipe_images.get(1);
-
     }
 
     public void addPipesGroup(CanvasWindow canvas) {
