@@ -12,7 +12,6 @@ public class PipeHandler {
     private final Random RAND = new Random();
     private GraphicsGroup pipes = new GraphicsGroup();
     private ArrayList<Image> pipe_images = new ArrayList<Image>();
-    private final double WITDH_OF_PIPE = new Image(0, 0, "Final/Pipe.png").getWidth() * Constants.PIPE_SCALE;
     private Image lower_pipe;
     private Image upper_pipe;
     
@@ -79,13 +78,13 @@ public class PipeHandler {
 
     private double calculateX() {
         if (pipe_images.size() == 0) { // This is only for the initial case when they're no images in the list yet. Spawns pipe offscreen
-            return Constants.CANVAS_WIDTH + WITDH_OF_PIPE;
+            return Constants.PIPE_STARTING_LOCATION_X;
         }
         return (pipe_images.get(pipe_images.size() - 1).getCenter().getX() + Constants.HORIZONTAL_DISTANCE_BETWEEN_PIPES);
     }
 
     public void move() {
-        if (pipe_images.get(0).getCenter().getX() < -WITDH_OF_PIPE) {
+        if (pipe_images.get(0).getCenter().getX() < -Constants.PIPE_WIDTH) {
             pipes.remove(pipe_images.remove(0)); // Remove lower pipe
             pipes.remove(pipe_images.remove(0)); // Remove upper pipe
             createPipe();
@@ -101,7 +100,7 @@ public class PipeHandler {
     /*
      * Returns the current pipe that the birds can collide into
      */
-    public Image getCurrentPipe() {
-        return lower_pipe;
+    public double[] getCurrentPipe() {
+        return new double[]{lower_pipe.getCenter().getY() - Constants.PIPE_HEIGHT / 2, upper_pipe.getCenter().getY() + Constants.PIPE_HEIGHT / 2};
     }
 }

@@ -13,7 +13,8 @@ public class NeuralNetwork {
     private boolean isAlive = true;
     private int fitness = 0;
     public ArrayList<Neuron> neurons = new ArrayList<>();
-    private static final int NUM_OF_INPUTS = 4; // For simplicity, this will be equal to the number of neurons per layer
+    private static final int NUM_OF_INPUTS = 3; // For simplicity, this will be equal to the number of neurons per layer
+    private static final int NEURONS_PER_LAYER = 4;
     private static final int NUM_OF_LAYERS = 2;
 
     private static final ActivationFunction middle_function = (x) -> Math.max(0, x);
@@ -112,10 +113,9 @@ public class NeuralNetwork {
      */
     public boolean moveBird() {
         if (isAlive) {
-            neurons.get(0).inputs.add(bird.getCenter().getY());
-            neurons.get(1).inputs.add(bird.getSpeed());
-            neurons.get(2).inputs.add(pipes.getCurrentPipe().getX());
-            neurons.get(3).inputs.add(pipes.getCurrentPipe().getY());
+            neurons.get(0).inputs.add(bird.getCenter().getY()); // Bird Y Location
+            neurons.get(1).inputs.add(pipes.getCurrentPipe()[0]); // Lower Pipe Y Location
+            neurons.get(2).inputs.add(pipes.getCurrentPipe()[1]); // Upper Pipe Y Location
 
             neurons.forEach(Neuron::calculateOutput); // Goes through the neural network tree
             double jump = neurons.get(neurons.size() - 1).output; // The last neuron holds the final output for jump
@@ -126,7 +126,7 @@ public class NeuralNetwork {
             fitness += 1;
         }
         else {
-            bird.moveBy(-Constants.GAMESPEED, 0); // Moves the bird to the left until it's off the screen
+            bird.moveBy(-Constants.GAMESPEED, 0); // Moves the bird to the left until it's off the screen after it has died
         }
         return isAlive;
     }

@@ -7,15 +7,15 @@ import edu.macalester.graphics.CanvasWindow;
 
 public class NEAT {
 
-    private final int TOTAL_BIRDS;
     private ArrayList<NeuralNetwork> networks = new ArrayList<>();
     private final PipeHandler pipes;
     private final CanvasWindow canvas;
 
-    public NEAT(PipeHandler pipes, CanvasWindow canvas, int total_birds) {
+    private static final int TOTAL_BIRDS = 100;
+
+    public NEAT(PipeHandler pipes, CanvasWindow canvas) {
         this.pipes = pipes;
         this.canvas = canvas;
-        TOTAL_BIRDS = total_birds;
         for (int bird = 0; bird < TOTAL_BIRDS; bird++) {
             networks.add(new NeuralNetwork(pipes, canvas));
         }
