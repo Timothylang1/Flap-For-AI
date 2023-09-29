@@ -8,14 +8,10 @@ import edu.macalester.graphics.CanvasWindow;
 public class NEAT {
 
     private ArrayList<NeuralNetwork> networks = new ArrayList<>();
-    private final PipeHandler pipes;
-    private final CanvasWindow canvas;
 
     private static final int TOTAL_BIRDS = 10;
 
     public NEAT(PipeHandler pipes, CanvasWindow canvas) {
-        this.pipes = pipes;
-        this.canvas = canvas;
         for (int bird = 0; bird < TOTAL_BIRDS; bird++) {
             networks.add(new NeuralNetwork(pipes, canvas));
         }
@@ -35,23 +31,18 @@ public class NEAT {
         int best_fitness = 0;
         NeuralNetwork best_neural_network = networks.get(0);
         for (NeuralNetwork network : networks) {
-            int fitness = network.reset();
+            int fitness = network.reset(); // Default resets neural network as well as returns fitness
             if (best_fitness <= fitness) {
                 best_fitness = fitness;
                 best_neural_network = network;
             }
         }
 
-        // Remove all the networks and birds except the best fitness one
-        for (NeuralNetwork network : networks) {
-            if (!network.equals(best_neural_network)) network.removeBird(canvas);
-        }
-        networks.clear();
-        networks.add(best_neural_network);
-
         // Then create mutations off of that neural network, but we will keep the original one in case the rest are worse than the original
-        for (int i = 0; i < TOTAL_BIRDS - 1; i++) {
-            networks.add(new NeuralNetwork(pipes, canvas, best_neural_network));
+        for (NeuralNetwork network : networks) {
+            if (!network.equals(best_neural_network)) {
+                network.copyAndMutate(best_neural_network.neurons);
+            }
         }
     }
 

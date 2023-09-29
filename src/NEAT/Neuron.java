@@ -10,7 +10,8 @@ public class Neuron {
     private ActivationFunction function;
     private static Random rand = new Random();
     public ArrayList<Double> inputs = new ArrayList<>();
-    public ArrayList<Neuron> connected_neurons = new ArrayList<>();
+    public ArrayList<Integer> connected_neurons = new ArrayList<>(); // Holds the index of connected neurons in all_neurons list
+    private ArrayList<Neuron> all_neurons;
     public double output;
 
     private static final double DIFFERENTIAL = 1; // The range at which the neural network changes
@@ -18,7 +19,8 @@ public class Neuron {
     /*
      * For input neurons, we only give them one input which we don't change at all. The only purpose of the input neuron is to connect to the other nuerons
      */
-    public Neuron() {
+    public Neuron(ArrayList<Neuron> all_neurons) {
+        this.all_neurons = all_neurons;
         weights = new ArrayList<>(Arrays.asList(1.0));
         bias = 0;
         function = x -> x;
@@ -27,7 +29,8 @@ public class Neuron {
     /*
      * Initalization of new neuron for middle
      */
-    public Neuron(int num_of_weights, ActivationFunction function) {
+    public Neuron(int num_of_weights, ActivationFunction function, ArrayList<Neuron> all_neurons) {
+        this.all_neurons = all_neurons;
         this.function = function;
         for (int i = 0; i < num_of_weights; i++) {
             weights.add(rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL / 2); // Slightly change and vary the weights
@@ -36,13 +39,17 @@ public class Neuron {
     }
 
     /*
-     * Modifying input slightly (evolving the neuron randomly)
+     * Copies in a neuron key values, then mutates slightly
      */
-    public Neuron(ArrayList<Double> input_weights, double bias, ActivationFunction function) {
-        this.function = function;
-        for (int i = 0; i < input_weights.size(); i++) {
-            weights.add(input_weights.get(i) + rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL); // Slightly change and vary the weights
-        }
+    public void mutate(Neuron neuron) {
+        // Copies in weights
+        weights = new ArrayList<>(neuron.weights);
+        weights.replaceAll(x -> {
+            return x + rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL / 2;
+        });
+
+        // Copies in bias
+        bias = neuron.bias;
         bias = bias + rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL / 2;
     }
 
@@ -55,8 +62,8 @@ public class Neuron {
         inputs.clear(); // Clear inputs after each calculation
         
         // Adds output to all connected neurons
-        for (Neuron neuron : connected_neurons) {
-            neuron.inputs.add(output);
+        for (Integer neuron : connected_neurons) {
+            all_neurons.get(neuron).inputs.add(output);
         }
     }
 }
