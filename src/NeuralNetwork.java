@@ -14,8 +14,7 @@ public class NeuralNetwork {
     private int fitness = 0;
     public ArrayList<Neuron> neurons = new ArrayList<>();
     private static final int NUM_OF_INPUTS = 3; // For simplicity, this will be equal to the number of neurons per layer
-    private static final int NEURONS_PER_LAYER = 4;
-    private static final int NUM_OF_LAYERS = 2;
+    private static final int NUM_OF_LAYERS = 0;
 
     private static final ActivationFunction middle_function = (x) -> Math.max(0, x);
     private static final ActivationFunction output_function = (x) -> x;
