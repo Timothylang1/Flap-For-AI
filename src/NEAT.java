@@ -11,7 +11,7 @@ public class NEAT {
     private final PipeHandler pipes;
     private final CanvasWindow canvas;
 
-    private static final int TOTAL_BIRDS = 100;
+    private static final int TOTAL_BIRDS = 10;
 
     public NEAT(PipeHandler pipes, CanvasWindow canvas) {
         this.pipes = pipes;

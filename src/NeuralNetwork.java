@@ -115,6 +115,7 @@ public class NeuralNetwork {
             neurons.get(0).inputs.add(bird.getCenter().getY()); // Bird Y Location
             neurons.get(1).inputs.add(pipes.getCurrentPipe()[0]); // Lower Pipe Y Location
             neurons.get(2).inputs.add(pipes.getCurrentPipe()[1]); // Upper Pipe Y Location
+            // neurons.get(3).inputs.add(bird.getSpeed()); // Bird speed
 
             neurons.forEach(Neuron::calculateOutput); // Goes through the neural network tree
             double jump = neurons.get(neurons.size() - 1).output; // The last neuron holds the final output for jump

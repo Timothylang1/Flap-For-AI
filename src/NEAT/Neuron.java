@@ -13,6 +13,8 @@ public class Neuron {
     public ArrayList<Neuron> connected_neurons = new ArrayList<>();
     public double output;
 
+    private static final double DIFFERENTIAL = 1; // The range at which the neural network changes
+
     /*
      * For input neurons, we only give them one input which we don't change at all. The only purpose of the input neuron is to connect to the other nuerons
      */
@@ -28,9 +30,9 @@ public class Neuron {
     public Neuron(int num_of_weights, ActivationFunction function) {
         this.function = function;
         for (int i = 0; i < num_of_weights; i++) {
-            weights.add(rand.nextDouble() - 0.5); // Slightly change and vary the weights
+            weights.add(rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL / 2); // Slightly change and vary the weights
         }
-        bias = bias + rand.nextDouble() - 0.5;
+        bias = bias + rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL / 2;
     }
 
     /*
@@ -39,9 +41,9 @@ public class Neuron {
     public Neuron(ArrayList<Double> input_weights, double bias, ActivationFunction function) {
         this.function = function;
         for (int i = 0; i < input_weights.size(); i++) {
-            weights.add(input_weights.get(i) + rand.nextDouble() - 0.5); // Slightly change and vary the weights
+            weights.add(input_weights.get(i) + rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL); // Slightly change and vary the weights
         }
-        bias = bias + rand.nextDouble() - 0.5;
+        bias = bias + rand.nextDouble() * DIFFERENTIAL - DIFFERENTIAL / 2;
     }
 
     public void calculateOutput() {
