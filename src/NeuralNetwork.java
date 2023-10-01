@@ -15,7 +15,6 @@ public class NeuralNetwork {
     private boolean isAlive = true;
     private int fitness = 0;
     public ArrayList<Neuron> neurons = new ArrayList<>();
-    private static final int NUM_OF_OUTPUTS = 2; // Jump or not jump output neurons
     private static final Random RAND = new Random();
 
     private static final ActivationFunction middle_function = (x) -> Math.max(0, x);
@@ -29,6 +28,8 @@ public class NeuralNetwork {
         bird = new Bird(pipes);
         bird.addBird(canvas);
 
+        addConnection(); // Default add one random connection
+
         // Create input neurons
         for (int inputs = 0; inputs < Neural_Constants.NUM_OF_INPUTS; inputs++) {
             Neuron neuron = new Neuron();
@@ -36,7 +37,7 @@ public class NeuralNetwork {
         }
 
         // Create output layer
-        for (int output = 0; output < NUM_OF_OUTPUTS; output++) {
+        for (int output = 0; output < Neural_Constants.NUM_OF_OUTPUTS; output++) {
             Neuron neuron = new Neuron();
             neurons.add(neuron);
         }
