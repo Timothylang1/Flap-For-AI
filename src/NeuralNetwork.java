@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 import Game.Bird;
 import Game.Constants;
 import Game.PipeHandler;
 import NEAT.ActivationFunction;
+import NEAT.Neural_Constants;
 import NEAT.Neuron;
 import edu.macalester.graphics.CanvasWindow;
 
@@ -13,8 +15,8 @@ public class NeuralNetwork {
     private boolean isAlive = true;
     private int fitness = 0;
     public ArrayList<Neuron> neurons = new ArrayList<>();
-    private static final int NUM_OF_INPUTS = 3; // Y_location of top pipe, Y_location of bottom pipe, Y_location of bird
     private static final int NUM_OF_OUTPUTS = 2; // Jump or not jump output neurons
+    private static final Random RAND = new Random();
 
     private static final ActivationFunction middle_function = (x) -> Math.max(0, x);
     private static final ActivationFunction output_function = (x) -> x;
@@ -28,17 +30,14 @@ public class NeuralNetwork {
         bird.addBird(canvas);
 
         // Create input neurons
-        for (int inputs = 0; inputs < NUM_OF_INPUTS; inputs++) {
-            Neuron neuron = new Neuron(neurons);
+        for (int inputs = 0; inputs < Neural_Constants.NUM_OF_INPUTS; inputs++) {
+            Neuron neuron = new Neuron();
             neurons.add(neuron);
-            for (int output = 0; output < NUM_OF_OUTPUTS; output++) { // Connect input neurons to output neurons
-                neuron.connected_neurons.add(NUM_OF_INPUTS + output);
-            }
         }
 
         // Create output layer
         for (int output = 0; output < NUM_OF_OUTPUTS; output++) {
-            Neuron neuron = new Neuron(NUM_OF_INPUTS, output_function, neurons);
+            Neuron neuron = new Neuron();
             neurons.add(neuron);
         }
     }
@@ -48,7 +47,7 @@ public class NeuralNetwork {
      */
     public void copyAndMutate(ArrayList<Neuron> network) {
         // Mutate all slightly except for input neurons
-        for (int neuron_index = NUM_OF_INPUTS; neuron_index < neurons.size(); neuron_index++) {
+        for (int neuron_index = Neural_Constants.NUM_OF_INPUTS; neuron_index < neurons.size(); neuron_index++) {
             neurons.get(neuron_index).mutate(network.get(neuron_index));
         }
     }
@@ -57,6 +56,8 @@ public class NeuralNetwork {
      * Adds in random neuron in network
      */
     private void addNeuron() {
+        // First, choose random connection to severe
+
 
     }
 
@@ -72,9 +73,9 @@ public class NeuralNetwork {
      */
     public boolean moveBird() {
         if (isAlive) {
-            neurons.get(0).inputs.add(bird.getCenter().getY()); // Bird Y Location
-            neurons.get(1).inputs.add(pipes.getCurrentPipe()[0]); // Lower Pipe Y Location
-            neurons.get(2).inputs.add(pipes.getCurrentPipe()[1]); // Upper Pipe Y Location
+            neurons.get(0).inputs.put(neurons.get(0), bird.getCenter().getY()); // Bird Y Location
+            neurons.get(1).inputs.put(neurons.get(1), pipes.getCurrentPipe()[0]); // Lower Pipe Y Location
+            neurons.get(2).inputs.put(neurons.get(2), pipes.getCurrentPipe()[1]); // Upper Pipe Y Location
             // neurons.get(3).inputs.add(bird.getSpeed()); // Bird speed
 
             neurons.forEach(Neuron::calculateOutput); // Goes through the neural network tree

@@ -29,8 +29,13 @@ public class Test {
         //     if (red.getElementAt(blue.getCenter().getX(), blue.getCenter().getY()) != null) System.out.println("Y");
         //     else System.out.println("N");
         // });
-        ArrayList<Integer> test = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5));
-        test.replaceAll(x -> {return x * 2;});
+        // ArrayList<Integer> test = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5));
+        // test.replaceAll(x -> {return x * 2;});
+        // System.out.println(test);
+
+        ArrayList<Integer> test = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 5, 6));
+        test.add(test.size() - 2, 4);
         System.out.println(test);
+        System.out.println(test.get(test.size() - 2 - 1));
     }
 }
