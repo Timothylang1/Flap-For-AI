@@ -17,9 +17,8 @@ public class Gene {
         return (x.INITIAL_NODE == INITIAL_NODE) && (x.END_NODE == END_NODE);
     }
 
-
     @Override
     public String toString() {
-        return "\nCurrent Gene\nInitial node: " + Integer.toString(INITIAL_NODE) + "\nEnd node: " + Integer.toString(END_NODE) + "\n";
+        return "\nCurrent Gene\nInitial node: " + Integer.toString(INITIAL_NODE) + "\nEnd node: " + Integer.toString(END_NODE) + "\nEnabled: " + enabled + "\n";
     }
 }

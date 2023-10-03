@@ -9,9 +9,8 @@ import java.util.Random;
  */
 public class GeneHandler {
     
-    private int neuron_number = Neural_Constants.NUM_OF_INPUTS + Neural_Constants.NUM_OF_OUTPUTS;
-    private HashMap<Gene, Integer> new_node_connections = new HashMap<>(); // KEY: Gene that was broken, VALUE: the number of the new node that goes in place of the broken connection
-    private ArrayList<Gene> new_nodes = new ArrayList<>(); // Stores the list of new nodes added
+    private int neuron_number = Neural_Constants.NUM_OF_INPUTS + Neural_Constants.NUM_OF_OUTPUTS; // Global number of all new neurons we've seen
+    private HashMap<Gene, Integer> new_node_connections = new HashMap<>(); // KEY: Gene connection that was broken, VALUE: the number of the new node that goes in place of the broken connection
     private static final Random RAND = new Random();
 
     public GeneHandler() {
@@ -40,7 +39,7 @@ public class GeneHandler {
 
         // Then figure out if that connection existed before, and if it did, assign the node the correct number
         boolean node_already_exists = false;
-        int node_number = 0;
+        int node_number = neuron_number; // In case it's a new mutation with a new neuron, we assign it a new neuron_number
         for (Gene gene : new_node_connections.keySet()) {
             if (to_break.equals(gene)) {
                 node_number = new_node_connections.get(gene);
@@ -51,18 +50,17 @@ public class GeneHandler {
 
         // If this connection hasn't been broken before, then it is a new mutation we haven't seen, so we record it
         if (!node_already_exists) {
-            node_number = neuron_number;
             new_node_connections.put(to_break, node_number); // Add the gene that broke and the node number that was created so we store this new mutation
             neuron_number += 1; // Increase the node_number so the next new "unique" node we add will be different than all other nodes
         }
 
-        // Then create new node and choose a random location to insert into the list of nodes
-        Neuron neuron = new Neuron(node_number, Neural_Constants.MIDDLE_FUNCTION);
-        neural_nodes.add(RAND.nextInt())
+        // Then create new node and choose a random location to insert into the middle section of the list of nodes
+        neural_nodes.add(RAND.nextInt(Neural_Constants.NUM_OF_INPUTS, neural_nodes.size() - Neural_Constants.NUM_OF_OUTPUTS + 1), new Neuron(node_number, Neural_Constants.MIDDLE_FUNCTION));
 
-        // Create connections (IMPORTANT: DO NOT SWAP THE ORDER OF THESE)
-        addConnection(neural_genes, to_break, node_number, node_number);
-
+        // Create connections to connect in new neuron (IMPORTANT: DO NOT SWAP THE ORDER OF THESE BECAUSE OF HOW THEY ARE PLACED IN THE GENE SEQUENCE)
+        // The weights are designed to maintain the original weight
+        addConnection(neural_genes, node_number, to_break.END_NODE, to_break.weight);
+        addConnection(neural_genes, to_break.INITIAL_NODE, node_number, 1);
     }
 
     /*
@@ -131,15 +129,18 @@ public class GeneHandler {
     }
 
     public static void main(String[] args) {
+        RAND.nextInt(3, 3 + 1);
         GeneHandler handler = new GeneHandler();
         ArrayList<Neuron> neural_nodes = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 5; i++) {
             neural_nodes.add(new Neuron(i, x -> x));
         }
         ArrayList<Gene> genes = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            handler.addRandomConnection(genes, neural_nodes);
-        }
+        handler.addRandomConnection(genes, neural_nodes);
+        handler.addRandomNode(genes, neural_nodes);
+        handler.addRandomNode(genes, neural_nodes);
+        handler.addRandomNode(genes, neural_nodes);
+
         System.out.println(genes);
     }
 
