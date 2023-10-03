@@ -96,9 +96,9 @@ public class GraphVisual {
         return outputNodes;
     }
 
-    public void drawNode() {
-        if 
-    }
+    // public void drawNode() {
+    //     if 
+    // }
 
     public static void main(String[] args) {
         GraphVisual vis = new GraphVisual();
