@@ -5,6 +5,7 @@ import edu.macalester.graphics.Rectangle;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Test {
     public static void main(String[] args) {
@@ -37,5 +38,11 @@ public class Test {
         test.add(test.size() - 2, 4);
         System.out.println(test);
         System.out.println(test.get(test.size() - 2 - 1));
+
+        HashMap<Integer[], Integer> new_node_connections = new HashMap<>();
+        Integer[] test1 = new Integer[]{1, 2};
+        new_node_connections.put(test1, 3);
+        System.out.println(new_node_connections.keySet().contains(new Integer[]{1, 2}));
+
     }
 }

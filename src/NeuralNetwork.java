@@ -5,6 +5,7 @@ import Game.Bird;
 import Game.Constants;
 import Game.PipeHandler;
 import NEAT.ActivationFunction;
+import NEAT.GeneomeHandler;
 import NEAT.Neural_Constants;
 import NEAT.Neuron;
 import edu.macalester.graphics.CanvasWindow;
@@ -17,8 +18,7 @@ public class NeuralNetwork {
     public ArrayList<Neuron> neurons = new ArrayList<>();
     private static final Random RAND = new Random();
 
-    private static final ActivationFunction middle_function = (x) -> Math.max(0, x);
-    private static final ActivationFunction output_function = (x) -> x;
+    public static GeneomeHandler geneomeHandler;
 
     /*
      * Used to create initialization of neural network
@@ -28,19 +28,13 @@ public class NeuralNetwork {
         bird = new Bird(pipes);
         bird.addBird(canvas);
 
+        // Create input + Output neurons
+        for (int inputs = 0; inputs < Neural_Constants.NUM_OF_INPUTS + Neural_Constants.NUM_OF_OUTPUTS; inputs++) {
+            Neuron neuron = new Neuron(inputs, Neural_Constants.INPUT_OUTPUT_FUNCTION);
+            neurons.add(neuron);
+        }
+
         addConnection(); // Default add one random connection
-
-        // Create input neurons
-        for (int inputs = 0; inputs < Neural_Constants.NUM_OF_INPUTS; inputs++) {
-            Neuron neuron = new Neuron();
-            neurons.add(neuron);
-        }
-
-        // Create output layer
-        for (int output = 0; output < Neural_Constants.NUM_OF_OUTPUTS; output++) {
-            Neuron neuron = new Neuron();
-            neurons.add(neuron);
-        }
     }
 
     /*
@@ -73,6 +67,8 @@ public class NeuralNetwork {
      * Returns true if bird moved successfully, false otherwise
      */
     public boolean moveBird() {
+
+        // NOTE: NEED TO CALL CALCULATEOUTPUT ON THE FINAL OUTPUT NEURONS --------------------------------------
         if (isAlive) {
             neurons.get(0).inputs.put(neurons.get(0), bird.getCenter().getY()); // Bird Y Location
             neurons.get(1).inputs.put(neurons.get(1), pipes.getCurrentPipe()[0]); // Lower Pipe Y Location

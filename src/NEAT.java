@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 
 import Game.PipeHandler;
+import NEAT.GeneomeHandler;
 import edu.macalester.graphics.CanvasWindow;
 
 public class NEAT {
@@ -11,7 +12,10 @@ public class NEAT {
 
     private static final int TOTAL_BIRDS = 10;
 
+    private static final GeneomeHandler geneomeHandler = new GeneomeHandler();
+
     public NEAT(PipeHandler pipes, CanvasWindow canvas) {
+        NeuralNetwork.geneomeHandler = geneomeHandler;
         for (int bird = 0; bird < TOTAL_BIRDS; bird++) {
             networks.add(new NeuralNetwork(pipes, canvas));
         }
