@@ -24,4 +24,9 @@ public class Neuron {
         output = bias;
         return to_return;
     }
+
+    @Override
+    public String toString() {
+        return "Neuron Info:\nIdentifier: " + Integer.toString(IDENTIFIER) + "\n";
+    }
 }
