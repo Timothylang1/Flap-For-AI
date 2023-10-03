@@ -3,12 +3,14 @@ package NEAT;
 public class Gene {
     public final int INITIAL_NODE;
     public final int END_NODE;
+    public boolean enabled;
     public double weight;
 
     public Gene(int initial_node, int end_node, double weight) {
         INITIAL_NODE = initial_node;
         END_NODE = end_node;
         this.weight = weight;
+        enabled = true;
     }
 
     public boolean equals(Gene x) {
@@ -17,6 +19,6 @@ public class Gene {
 
     @Override
     public String toString() {
-        return "\nCurrent Gene\nInitial node: " + Integer.toString(INITIAL_NODE) + "\nEnd node: " + Integer.toString(END_NODE) + "\n";
+        return "\nCurrent Gene\nInitial node: " + Integer.toString(INITIAL_NODE) + "\nEnd node: " + Integer.toString(END_NODE) + "\nEnabled: " + enabled + "\n";
     }
 }
