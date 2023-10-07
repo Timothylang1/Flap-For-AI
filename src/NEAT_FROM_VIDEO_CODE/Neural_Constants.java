@@ -1,4 +1,7 @@
-package NEAT;
+package NEAT_FROM_VIDEO_CODE;
+
+import NEAT.ActivationFunction;
+
 public class Neural_Constants {
     public static final int NUM_OF_INPUTS = 3; // Total number of inputs to the neural network
     public static final int NUM_OF_OUTPUTS = 2; // Total number of outputs (node 1 represents jump, node 2 represents not jump)
