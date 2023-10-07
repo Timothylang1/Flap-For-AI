@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import GraphVisualization.GraphVisual;
+
 /*
  * Contains list of all the changes made as well as methods to determine whether a change was made previously or not
  */
@@ -147,17 +149,17 @@ public class GeneHandler {
         ArrayList<Neuron> neural_nodes = new ArrayList<>();
         ArrayList<Gene> active_genes = new ArrayList<>();
         // ArrayList<Gene> deactive_genes = new ArrayList<>();
-        ArrayList<Neuron> neural_nodes_2 = new ArrayList<>();
-        ArrayList<Gene> active_genes_2 = new ArrayList<>();
-        // ArrayList<Gene> deactive_genes_2 = new ArrayList<>();
+        // ArrayList<Neuron> neural_nodes_2 = new ArrayList<>();
+        // ArrayList<Gene> active_genes_2 = new ArrayList<>();
+        // // ArrayList<Gene> deactive_genes_2 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             neural_nodes.add(new Neuron(i, x -> x));
         }
-        for (int i = 0; i < 5; i++) {
-            neural_nodes_2.add(new Neuron(i, x -> x));
-        }
+        // for (int i = 0; i < 5; i++) {
+        //     neural_nodes_2.add(new Neuron(i, x -> x));
+        // }
         GeneHandler.addRandomConnection(active_genes, neural_nodes);
-        GeneHandler.addRandomConnection(active_genes_2, neural_nodes_2);
+        // GeneHandler.addRandomConnection(active_genes_2, neural_nodes_2);
         for (int i = 0; i < 10; i++) {
             if (rand.nextInt(2) == 0) {
                 GeneHandler.addRandomConnection(active_genes, neural_nodes);
@@ -166,14 +168,19 @@ public class GeneHandler {
                 GeneHandler.addRandomNode(active_genes, neural_nodes);
             }
         }
-        for (int i = 0; i < 10; i++) {
-            if (rand.nextInt(2) == 0) {
-                GeneHandler.addRandomConnection(active_genes_2, neural_nodes_2);
-            }
-            else {
-                GeneHandler.addRandomNode(active_genes_2, neural_nodes_2);
-            }
-        }
+        // for (int i = 0; i < 10; i++) {
+        //     if (rand.nextInt(2) == 0) {
+        //         GeneHandler.addRandomConnection(active_genes_2, neural_nodes_2);
+        //     }
+        //     else {
+        //         GeneHandler.addRandomNode(active_genes_2, neural_nodes_2);
+        //     }
+        // }
+
+        GraphVisual vis = new GraphVisual(active_genes, Neural_Constants.NUM_OF_INPUTS, Neural_Constants.NUM_OF_OUTPUTS);
+        System.out.println("The total number of nodes is: " + vis.totalNodes);
+
+
         System.out.println("Bird 1 ------------------------- \n");
         System.out.println("Active genes: \n");
         System.out.println(active_genes);
@@ -181,13 +188,13 @@ public class GeneHandler {
         // System.out.println(deactive_genes);
         System.out.println("Neural nodes: \n");
         System.out.println(neural_nodes);
-        System.out.println("Bird 2 ------------------------- \n");
-        System.out.println("Active genes: \n");
-        System.out.println(active_genes_2);
-        // System.out.println("Disabled genes: \n");
-        // System.out.println(deactive_genes_2);
-        System.out.println("Neural nodes: \n");
-        System.out.println(neural_nodes_2);
+        // System.out.println("Bird 2 ------------------------- \n");
+        // System.out.println("Active genes: \n");
+        // System.out.println(active_genes_2);
+        // // System.out.println("Disabled genes: \n");
+        // // System.out.println(deactive_genes_2);
+        // System.out.println("Neural nodes: \n");
+        // System.out.println(neural_nodes_2);
     }
 
 }
