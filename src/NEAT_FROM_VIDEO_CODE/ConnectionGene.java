@@ -14,6 +14,13 @@ public class ConnectionGene {
         this.to = to;
     }
 
+    public ConnectionGene copy() {
+        ConnectionGene copy = new ConnectionGene(from, to);
+        copy.weight = weight;
+        copy.enabled = enabled;
+        return copy;
+    }
+
     /*
      * Returns true if the from and to genes match. The genes will only match if they have the same innovation number
      */

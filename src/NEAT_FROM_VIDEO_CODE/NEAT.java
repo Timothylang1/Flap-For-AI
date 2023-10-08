@@ -7,46 +7,37 @@ public class NEAT {
     public static final int MAX_NODES = (int) Math.pow(2, 20); // Ridiculously high number
     private HashMap<ConnectionGene, Integer> all_connections = new HashMap<>(); // Stores connection gene and it's corresponding innovation number
     private ArrayList<NodeGene> all_nodes = new ArrayList<>();
-    private int input_size, output_size, clients;
 
-    public NEAT(int input_size, int output_size, int clients) {
-        reset(input_size, output_size, clients);
+    public NEAT() {
+        reset();
     }
 
+    /*
+     * Creates empty genome with all input and output nodes
+     */
     public Genome emptyGenome() {
         Genome g = new Genome(this);
-        for (int i = 0; i < input_size + output_size; i++) {
-            g.nodes.add(getNode(i + 1));
+        for (int i = 0; i < Neural_Constants.NUM_OF_INPUTS + Neural_Constants.NUM_OF_OUTPUTS; i++) {
+            g.nodes.add(getNode(i));
         }
         return g;
     }
 
-    public void reset(int input_size, int output_size, int clients) {
-        this.input_size = input_size;
-        this.output_size = output_size;
-        this.clients = clients;
-
+    public void reset() {
         all_connections.clear();
         all_nodes.clear();
 
-        for (int i = 0; i < input_size; i++) {
+        for (int i = 0; i < Neural_Constants.NUM_OF_INPUTS; i++) {
             NodeGene n = getNode();
             n.x = 0.1;
-            n.y = (i + 1) / (double) (input_size + 1);
+            n.y = (i + 1) / (double) (Neural_Constants.NUM_OF_INPUTS + 1);
         }
 
-        for (int i = 0; i < output_size; i++) {
+        for (int i = 0; i < Neural_Constants.NUM_OF_OUTPUTS; i++) {
             NodeGene n = getNode();
             n.x = 0.9;
-            n.y = (i + 1) / (double) (output_size + 1);
+            n.y = (i + 1) / (double) (Neural_Constants.NUM_OF_OUTPUTS + 1);
         }
-    }
-
-    public static ConnectionGene getConnection(ConnectionGene to_copy) {
-        ConnectionGene copy = new ConnectionGene(to_copy.from, to_copy.to);
-        copy.weight = to_copy.weight;
-        copy.enabled = to_copy.enabled;
-        return copy;
     }
 
     public ConnectionGene getConnection(NodeGene node1, NodeGene node2) {
@@ -64,7 +55,7 @@ public class NEAT {
     }
 
     public NodeGene getNode() {
-        NodeGene n = new NodeGene(all_nodes.size() + 1);
+        NodeGene n = new NodeGene(all_nodes.size());
         all_nodes.add(n);
         return n;
     }
@@ -73,12 +64,12 @@ public class NEAT {
      * Returns node at given location, otherwise create a brand new node and add it to end of list
      */
     public NodeGene getNode(int id) {
-        if (id <= all_nodes.size()) return all_nodes.get(id - 1);
+        if (id < all_nodes.size()) return all_nodes.get(id);
         return getNode();
     } 
 
     public static void main(String[] args) {
-        NEAT neat = new NEAT(3, 2, 100);
+        NEAT neat = new NEAT();
         Genome g = neat.emptyGenome();
         System.out.println(g.nodes.size());
     }
