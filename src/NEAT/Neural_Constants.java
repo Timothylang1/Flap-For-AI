@@ -1,4 +1,4 @@
-package NEAT_FROM_VIDEO_CODE;
+package NEAT;
 
 public class Neural_Constants {
     public static final int NUM_OF_INPUTS = 3; // Total number of inputs to the neural network

@@ -1,4 +1,4 @@
-package NEAT_FROM_VIDEO_CODE;
+package NEAT;
 
 public interface ActivationFunction {
     double function(double x);

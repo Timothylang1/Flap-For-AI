@@ -3,6 +3,8 @@ package NEAT_FROM_VIDEO_CODE;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import NEAT.Neural_Constants;
+
 public class NEAT {
     public static final int MAX_NODES = (int) Math.pow(2, 20); // Ridiculously high number
     private HashMap<ConnectionGene, Integer> all_connections = new HashMap<>(); // Stores connection gene and it's corresponding innovation number

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import Game.PipeHandler;
 import NEAT.Neuron;
 import NEAT.Gene;
-import NEAT_FROM_VIDEO_CODE.Neural_Constants;
+import NEAT.Neural_Constants;
 
 
 public class GraphVisual {

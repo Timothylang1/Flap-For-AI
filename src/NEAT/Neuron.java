@@ -20,7 +20,7 @@ public class Neuron {
      * Resets output and return the calculated output of that neuron
      */
     public double calculateOutput() {
-        double to_return = function.Function(output); // Use activation function assigned to that neuron
+        double to_return = function.function(output); // Use activation function assigned to that neuron
         output = bias;
         return to_return;
     }

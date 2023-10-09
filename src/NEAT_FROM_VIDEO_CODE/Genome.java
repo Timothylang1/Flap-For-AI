@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import NEAT.Neural_Constants;
+
 public class Genome {
     public ArrayList<ConnectionGene> connections = new ArrayList<>();
     public Set<NodeGene> nodes = new HashSet<>();

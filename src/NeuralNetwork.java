@@ -6,8 +6,8 @@ import Game.Constants;
 import Game.PipeHandler;
 import NEAT.ActivationFunction;
 import NEAT.GeneomeHandler;
+import NEAT.Neural_Constants;
 import NEAT.Neuron;
-import NEAT_FROM_VIDEO_CODE.Neural_Constants;
 import edu.macalester.graphics.CanvasWindow;
 
 public class NeuralNetwork {
