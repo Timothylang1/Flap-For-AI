@@ -11,10 +11,7 @@ import java.util.Random;
  */
 public class GeneHandler {
     
-    private static int neuron_number = Neural_Constants.NUM_OF_INPUTS + Neural_Constants.NUM_OF_OUTPUTS; // Global number of all new neurons we've seen
-    private static HashMap<Gene, Integer> new_node_connections = new HashMap<>(); // KEY: Gene connection that was broken, VALUE: the number of the new node that goes in place of the broken connection
     private static final Random RAND = new Random();
-
 
     /*
      * Creates random connection between two unconnected nodes
@@ -36,23 +33,6 @@ public class GeneHandler {
         // First, pick a random connection to severe and deactivate it
         Gene to_break = enabled_genes.remove(RAND.nextInt(enabled_genes.size()));
 
-        // Then figure out if that connection existed before, and if it did, assign the node the correct number
-        boolean node_already_exists = false;
-        int node_number = neuron_number; // In case it's a new mutation with a new neuron, we assign it a new neuron_number
-        for (Gene gene : new_node_connections.keySet()) {
-            if (to_break.equals(gene)) {
-                node_number = new_node_connections.get(gene);
-                node_already_exists = true;
-                break;
-            }
-        }
-
-        // If this connection hasn't been broken before, then it is a new mutation we haven't seen, so we record it
-        if (!node_already_exists) {
-            new_node_connections.put(to_break, node_number); // Add the gene that broke and the node number that was created so we store this new mutation
-            neuron_number += 1; // Increase the node_number so the next new "unique" node we add will be different than all other nodes
-        }
-
         // Then create new node and choose a random location to insert into the middle section of the list of nodes between the original initial node and the end node of the connection
         int start_index;
         int end_index;
@@ -68,6 +48,9 @@ public class GeneHandler {
                 break;
             };
         }
+
+        // The new node will be given a node_value equal to the number of nodes in the list, so each new node is unique
+        int node_number = neural_nodes.size();
         neural_nodes.add(RAND.nextInt(start_index, end_index), new Neuron(node_number, Neural_Constants.MIDDLE_FUNCTION));
 
         // Create connections to connect in new neuron (IMPORTANT: DO NOT SWAP THE ORDER OF THESE BECAUSE OF HOW THEY ARE PLACED IN THE GENE SEQUENCE)
@@ -109,18 +92,10 @@ public class GeneHandler {
         for (int neuron_start_index = 0; neuron_start_index < neural_nodes.size() - Neural_Constants.NUM_OF_OUTPUTS; neuron_start_index++) {
             int start_neuron = neural_nodes.get(neuron_start_index).IDENTIFIER;
 
-            // Now we get a list of all the IDENTIFIERS of the neurons this start_neuron is connected to along it's path to an output node
+            // Now we get a list of all the IDENTIFIERS of the neurons this start_neuron is connected to
             ArrayList<Integer> already_connected = new ArrayList<>();
-            ArrayList<Integer> queue = new ArrayList<>();
-            queue.add(start_neuron);
-            while (!queue.isEmpty()) {
-                int to_check = queue.remove(0);
-                for (Gene gene : enabled_genes) {
-                    if (gene.INITIAL_NODE == to_check) {
-                        already_connected.add(gene.END_NODE);
-                        queue.add(gene.END_NODE);
-                    }
-                }
+            for (Gene gene : enabled_genes) {
+                if (gene.INITIAL_NODE == start_neuron) already_connected.add(gene.END_NODE);
             }
 
             // Now we get the list of neurons it isn't connected to
@@ -138,9 +113,50 @@ public class GeneHandler {
             }
             if (to_connect.size() != 0) possible_connections.put(start_neuron, to_connect); // If there are possible conneticons, we add to the list
         }
-
         return possible_connections;
     }
+
+    /*
+     * Returns a hashset list of n mutations where n = number_of_mutations
+     * KEY: list of genes
+     * VALUE: list of neural nodes associated with those genes
+     */
+    public static HashMap<ArrayList<Gene>, ArrayList<Neuron>> mutate(ArrayList<Gene> enabled_genes, ArrayList<Neuron> neural_nodes, int number_of_mutations) {
+        HashMap<ArrayList<Gene>, ArrayList<Neuron>> mutations = new HashMap<>();
+
+        // Calculate probabilities and execute mutations if nessecary
+        while (mutations.size() < number_of_mutations) {
+
+            // Create copy of genes and neural_nodes
+            ArrayList<Gene> genes = new ArrayList<>();
+            enabled_genes.forEach(x -> genes.add(new Gene(x.INITIAL_NODE, x.END_NODE, x.weight)));
+            ArrayList<Neuron> nodes = new ArrayList<>();
+            neural_nodes.forEach(x -> nodes.add(new Neuron(x.IDENTIFIER, x.function)));
+
+            // Calculate probabilities of mutation, then exectute mutation if the prob meets the threshold
+            double mutate_add_connection = RAND.nextDouble();
+            double mutate_add_node = RAND.nextDouble();
+            double mutate_modify_weight = RAND.nextDouble();
+            double mutate_modify_bias = RAND.nextDouble();
+            if (mutate_add_connection < Neural_Constants.MUTATE_ADD_CONNECTION) {
+                addRandomConnection(genes, nodes);
+            }
+            if (mutate_add_node < Neural_Constants.MUTATE_ADD_NODE) {
+                addRandomNode(genes, nodes);
+            }
+            if (mutate_modify_weight < Neural_Constants.MUTATE_MODIFY_WEIGHT) {
+                // Pick a random weight, then modify slightly
+                genes.get(RAND.nextInt(genes.size())).weight += RAND.nextDouble(-Neural_Constants.DIFFERENTIAL / 2, Neural_Constants.DIFFERENTIAL / 2);
+            }
+            if (mutate_modify_bias < Neural_Constants.MUTATE_MODIFY_BIAS) {
+                // Pick a random bias, then modify slightly
+                nodes.get(RAND.nextInt(nodes.size())).bias += RAND.nextDouble(-Neural_Constants.DIFFERENTIAL / 2, Neural_Constants.DIFFERENTIAL / 2);
+            }
+            mutations.put(genes, nodes);
+        }
+        return mutations;
+    }
+
 
     public static void main(String[] args) {
         Random rand = new Random();
@@ -188,6 +204,12 @@ public class GeneHandler {
         // System.out.println(deactive_genes_2);
         System.out.println("Neural nodes: \n");
         System.out.println(neural_nodes_2);
+
+        HashMap<Integer, Integer> test = new HashMap<>();
+        test.put(1, 1);
+        test.put(1, 2);
+        System.out.println(test);
+
     }
 
 }

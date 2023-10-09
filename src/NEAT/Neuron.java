@@ -2,7 +2,7 @@ package NEAT;
 
 public class Neuron {
     public double bias;
-    private ActivationFunction function;
+    public ActivationFunction function;
     public double output;
     public final int IDENTIFIER;
 
@@ -23,6 +23,20 @@ public class Neuron {
         double to_return = function.Function(output); // Use activation function assigned to that neuron
         output = bias;
         return to_return;
+    }
+
+    public Neuron copy() {
+        return new Neuron(IDENTIFIER, function);
+    }
+
+    @Override
+    public int hashCode() {
+        return IDENTIFIER;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return ((Neuron) o).IDENTIFIER == IDENTIFIER;
     }
 
     @Override

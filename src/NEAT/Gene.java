@@ -11,12 +11,30 @@ public class Gene {
         this.weight = weight;
     }
 
-    public boolean equals(Gene x) {
-        return (x.INITIAL_NODE == INITIAL_NODE) && (x.END_NODE == END_NODE);
+    public Gene copy() {
+        return new Gene(INITIAL_NODE, END_NODE, weight);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (((Gene) o).INITIAL_NODE == INITIAL_NODE) && (((Gene) o).END_NODE == END_NODE);
+    }
+
+    @Override
+    public int hashCode() {
+        return INITIAL_NODE * Neural_Constants.MAX_CONNECTIONS + END_NODE;
     }
 
     @Override
     public String toString() {
         return "\nCurrent Gene\nInitial node: " + Integer.toString(INITIAL_NODE) + "\nEnd node: " + Integer.toString(END_NODE) + "\n";
+    }
+
+    public static void main(String[] args) {
+        Gene gene1 = new Gene(0, 0, 0);
+        Gene gene2 = new Gene(0, 1, 0);
+        // ArrayList<Gene> test = new ArrayList<>();
+        // test.add(gene1);
+        // System.out.println(test.contains(gene2));
     }
 }
