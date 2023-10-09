@@ -98,7 +98,7 @@ public class Genome {
         neurons.forEach(neuron -> {
             to_sort.put(neuron.IDENTIFIER, genes.stream().filter(x -> x.INITIAL_NODE == neuron.IDENTIFIER).toList());
         });
-        neurons.clear();
+        genes.clear();
         neurons.forEach(neuron -> {
             genes.addAll(to_sort.get(neuron.IDENTIFIER));
         });
