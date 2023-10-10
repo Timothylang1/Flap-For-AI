@@ -176,23 +176,27 @@ public class Genome {
      * Creates copies of the neurons and genes, then creates a new genome with the copies, then returns the genome
      */
     public Genome copy() {
+        ArrayList<Neuron> copy_neurons = new ArrayList<>(neurons.stream().map(x -> x.copy()).toList());
+        return new Genome(copyGenes(), copy_neurons);
+    }
+
+    /*
+     * Creates copy of genes
+     */
+    public HashMap<Integer, ArrayList<Gene>> copyGenes() {
         HashMap<Integer, ArrayList<Gene>> copy_genes = new HashMap<>();
         genes.forEach((start_neuron, connected_neurons) -> {
             copy_genes.put(start_neuron, new ArrayList<>(connected_neurons.stream().map(x -> x.copy()).toList()));
         });
-        ArrayList<Neuron> copy_neurons = new ArrayList<>(neurons.stream().map(x -> x.copy()).toList());
-        return new Genome(copy_genes, copy_neurons);
+        return copy_genes;
     }
 
     /*
      * Return true if the two genomes should belong to the same species because they're similar enough
      */
     public static boolean difference(Genome g1, Genome g2) {
-        // First part focuses on converting the information to an easier format as well as figuring out which gene is the bigger
-        HashMap<Integer, List<Integer>> g1Map = new HashMap<>();
-        g1.genes.forEach((x, y) -> g1Map.put(x, y.stream().map(gene -> gene.END_NODE).toList())); // Converts genes to just a list of output nodes
-        HashMap<Integer, ArrayList<Integer>> g2Map = new HashMap<>();
-        g2.genes.forEach((x, y) -> g2Map.put(x, new ArrayList<>(y.stream().map(gene -> gene.END_NODE).toList()))); // We are going to be removing elements from the second hashmap, so this needs to be an arraylist
+        // First part, we copy the g2 map so we can edit when iterating through
+        HashMap<Integer, ArrayList<Gene>> g2_map_copy = g2.copyGenes();
         
         // Set up variables
         double sum_diff_weight = 0;
@@ -200,16 +204,33 @@ public class Genome {
         int disjoint_excess_genes = 0;
         
         // Next, start figuring out how many genes the genomes share
-        for (Integer start_node : g1Map.keySet()) {
-            if (!g2Map.keySet().contains(start_node)) disjoint_excess_genes += g1Map.get(start_node).size(); // If the start node doesn't exist in the other map, automatically all the genes are disjoint
+        for (Integer start_node : g1.genes.keySet()) {
+            if (!g2_map_copy.keySet().contains(start_node)) disjoint_excess_genes += g1.genes.get(start_node).size(); // If the start node doesn't exist in the other map, automatically all the genes are disjoint
             else {
-                for (Integer end_node : g1Map.get(start_node)) {
-                    if (g2Map.get(
-                        
-                    ))
+                for (Gene g1_gene : g1.genes.get(start_node)) {
+                    if (g2_map_copy.get(start_node).contains(g1_gene)) { // If the g2 map also contains the gene, then we take the difference in weights
+                        Gene g2_gene = g2_map_copy.get(start_node).get(g2_map_copy.get(start_node).indexOf(g1_gene)); // Get the corresponding gene
+                        sum_diff_weight += Math.abs(g2_gene.weight - g1_gene.weight);
+                        similar_genes += 1;
+                        g2_map_copy.get(start_node).remove(g2_gene); // Then remove the gene from the copy
+                    }
+                    else {
+                        disjoint_excess_genes += 1; // Otherwise, this is a disjoint gene because it doesn't appear in the g2 set
+                    }
                 }
             }
         }
+
+        // Whatever genes are left in the g2 set must be disjoint from the g1 set because they weren't removed during the above for loop
+        for (ArrayList<Gene> genes : g2_map_copy.values()) {
+            disjoint_excess_genes += genes.size();
+        }
+
+        // Calculate the average weight
+        double average_weight_diff = sum_diff_weight / similar_genes;
+
+        // Then return if the score
+        return Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT;
 
     }
 
