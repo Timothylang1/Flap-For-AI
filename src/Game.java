@@ -1,4 +1,5 @@
 import Game.*;
+import NEAT.NEAT;
 import edu.macalester.graphics.*;
 
 
@@ -8,7 +9,7 @@ public class Game {
     private final PipeHandler pipes = new PipeHandler();
     private final Background back = new Background();
     private final Score score = new Score();
-    private final NEAT neat;
+    private final NEAT neat = new NEAT(pipes);
 
     public Game() {
         // Add objects to canvas in correct order
@@ -16,9 +17,7 @@ public class Game {
         pipes.addPipesGroup(canvas);
         back.addLowerBackground(canvas);
         score.addScore(canvas);
-        
-        // NEAT needs to be created inside the constructor so that all the birds are visible when we add them to the canvas last
-        neat = new NEAT(pipes, canvas);
+        neat.addBirds(canvas);
 
         canvas.animate(() -> {
             back.move();
@@ -28,10 +27,6 @@ public class Game {
                 restartGame();
             }
         });
-
-        // canvas.onClick(point -> {
-        //     System.out.println(point.getPosition());
-        // });
     }
 
     private void restartGame() {
