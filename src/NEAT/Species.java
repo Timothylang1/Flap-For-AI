@@ -33,11 +33,11 @@ public class Species {
     }
 
     /*
-     * Returns top two genomes of best fit
+     * Returns top two genomes of best fit TEST THIS METHOD TO SEE IF SORT WORKS
      */
     public ArrayList<Genome> getBestFit() {
         genomes.sort(new SortGenomes());
-        
+
         return ;
     }
 
