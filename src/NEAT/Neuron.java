@@ -3,7 +3,6 @@ package NEAT;
 public class Neuron {
     public double bias;
     public ActivationFunction function;
-    public double output;
     public final int IDENTIFIER;
 
     /*
@@ -13,16 +12,13 @@ public class Neuron {
         this.function = function;
         IDENTIFIER = identifier;
         bias = 0; // Start with an initial bias of 0;
-        output = bias;
     }
 
     /*
-     * Resets output and return the calculated output of that neuron
+     * Calculates output using the activation function and bias
      */
-    public double calculateOutput() {
-        double to_return = function.function(output); // Use activation function assigned to that neuron
-        output = bias;
-        return to_return;
+    public double calculateOutput(double input) {
+        return function.function(input) + bias; // Use activation function assigned to that neuron
     }
 
     public Neuron copy() {

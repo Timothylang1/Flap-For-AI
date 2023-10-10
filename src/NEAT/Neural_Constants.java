@@ -14,5 +14,4 @@ public class Neural_Constants {
     public static final double MUTATE_MODIFY_WEIGHT = 0.075;
     public static final double MUTATE_MODIFY_BIAS = 0.075;
 
-    public static final int MAX_CONNECTIONS = 100000;
 }
