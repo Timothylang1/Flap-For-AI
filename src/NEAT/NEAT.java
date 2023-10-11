@@ -13,13 +13,21 @@ public class NEAT {
     private int score = 0; // How many frames the birds survived
 
     public NEAT(PipeHandler pipes, CanvasWindow canvas) {
-        // First, create all the birds as well as the genomes
-        for (int i = 0; i < Neural_Constants.POPULATION; i++) {
-            Genome gene = new Genome();
-            Bird bird = new Bird(pipes, gene);
-            bird.addBird(canvas);
+        // First, create a new species to begin with
+        Genome gene = new Genome();
+        Bird bird = new Bird(pipes, gene, canvas);
+        Species spec = new Species(gene);
+        genomes.add(gene);
+        birds.add(bird);
+        species.add(spec);
+
+        // Then create the rest of the genomes and add it to the species
+        for (int i = 0; i < Neural_Constants.POPULATION - 1; i++) {
+            gene = new Genome();
+            bird = new Bird(pipes, gene, canvas);
             genomes.add(gene);
             birds.add(bird);
+            spec.add(gene);
         }
     }
 
@@ -99,8 +107,9 @@ public class NEAT {
     }
 
     public static void main(String[] args) {
-        int x = 6;
-        int y = 4;
-        System.out.println((float) x / y);
+        ArrayList<Double> fitness = new ArrayList<>();
+        double total_fitness = fitness.stream().mapToDouble(Double::doubleValue).sum();
+        System.out.println(total_fitness);
+
     }
 }

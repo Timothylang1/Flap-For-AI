@@ -12,8 +12,9 @@ public class Bird extends Image {
     public Genome gene;
     public boolean isAlive; // Tells if the bird is still alive
 
-    public Bird(PipeHandler pipes, Genome gene) {
+    public Bird(PipeHandler pipes, Genome gene, CanvasWindow canvas) {
         super(0, 0, "Final/Bird.png");
+        canvas.add(this);
         this.pipes = pipes;
         setScale(Constants.BIRD_SCALE);
         reset(gene);
@@ -77,9 +78,5 @@ public class Bird extends Image {
         inputs[1] = pipes.getCurrentPipesY()[0]; // Lower pipe y location
         inputs[2] = pipes.getCurrentPipesY()[1]; // Upper pipe y location
         return inputs;
-    }
-
-    public void addBird(CanvasWindow canvas) {
-        canvas.add(this);
     }
 }

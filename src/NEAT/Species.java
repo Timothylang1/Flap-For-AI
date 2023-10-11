@@ -67,14 +67,4 @@ public class Species {
         else genomes.sort(new SortGenomes()); // Otherwise we sort the genomes from highest fitness to lowest fitness
         return new ArrayList<>(genomes.subList(0, 2));
     }
-
-    public static void main(String[] args) {
-        Species species = new Species(new Genome());
-        long test1 = 1;
-        System.out.println((int) test1);
-        double[] test = new double[100];
-        for (int i = 0; i < test.length; i++) {
-            System.out.println(test[i]);
-        }
-    }
 }
