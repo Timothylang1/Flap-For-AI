@@ -9,7 +9,7 @@ public class Game {
     private final PipeHandler pipes = new PipeHandler();
     private final Background back = new Background();
     private final Score score = new Score();
-    private final NEAT neat = new NEAT(pipes, canvas);
+    private final NEAT neat = new NEAT(pipes);
 
     public Game() {
         // Add objects to canvas in correct order
@@ -17,6 +17,7 @@ public class Game {
         pipes.addPipesGroup(canvas);
         back.addLowerBackground(canvas);
         score.addScore(canvas);
+        neat.addBirds(canvas);
 
         canvas.animate(() -> {
             back.move();

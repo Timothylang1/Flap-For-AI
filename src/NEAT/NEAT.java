@@ -2,6 +2,8 @@ package NEAT;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import Game.Bird;
 import Game.PipeHandler;
 import edu.macalester.graphics.CanvasWindow;
@@ -10,12 +12,13 @@ public class NEAT {
     ArrayList<Species> species = new ArrayList<>(); // Holds all of the currently active species
     ArrayList<Genome> genomes = new ArrayList<>(); // Holds all of the currently active genomes
     ArrayList<Bird> birds = new ArrayList<>(); // Holds the birds
+    private static final Random RAND = new Random();
     private int score = 0; // How many frames the birds survived
 
-    public NEAT(PipeHandler pipes, CanvasWindow canvas) {
+    public NEAT(PipeHandler pipes) {
         // First, create a new species to begin with
         Genome gene = new Genome();
-        Bird bird = new Bird(pipes, gene, canvas);
+        Bird bird = new Bird(pipes, gene);
         Species spec = new Species(gene);
         genomes.add(gene);
         birds.add(bird);
@@ -24,11 +27,18 @@ public class NEAT {
         // Then create the rest of the genomes and add it to the species
         for (int i = 0; i < Neural_Constants.POPULATION - 1; i++) {
             gene = new Genome();
-            bird = new Bird(pipes, gene, canvas);
+            bird = new Bird(pipes, gene);
             genomes.add(gene);
             birds.add(bird);
             spec.add(gene);
         }
+    }
+
+    /*
+     * Adds all birds to canvas
+     */
+    public void addBirds(CanvasWindow canvas) {
+        birds.forEach(x -> x.addToCanvas(canvas));
     }
 
     /*
@@ -56,15 +66,30 @@ public class NEAT {
      * Calculates how much offspring each species should produce, then swaps out the current genomes to the new ones that the offspring produced
      */
     private void createOffspring() {
-        adjustFitness(); // First, adjust fitnesses
+        // First adjust fitnesses
+        adjustFitness();
+
+        // Second, figure out roughly how many birds per species using the abjusted fitness
         List<Double> fitness = species.stream().map(x -> x.calculateSpeciesFitness()).toList();
         double total_fitness = fitness.stream().mapToDouble(Double::doubleValue).sum();
-        List<Integer> birds_per_species = fitness.stream().map(x -> (int) Math.round(Neural_Constants.POPULATION * x / total_fitness)).toList(); // Calculate how many genomes per species required
+        List<Double> birds_per_species = fitness.stream().map(x -> Neural_Constants.POPULATION * x / total_fitness).toList(); // Calculate how many genomes per species required
         
+        // Third, round species to an integer, but maintain population size
+        ArrayList<Integer> birds_per_species_rounded = new ArrayList<>();
+        double tracker = 0;
+        for (Double num : birds_per_species) {
+            tracker += num;
+            birds_per_species_rounded.add((int) tracker);
+            tracker -= (int) tracker;
+        }
+
+        // If the tracker had a little bit of a rounding error (i.e. it's currently sitting at 0.9999999 at the end), then we can add one to the last population
+        if (tracker > 0.5) birds_per_species_rounded.add(birds_per_species_rounded.remove(birds_per_species_rounded.size() - 1) + 1);
+
         // Have each species create its offspring genomes and add it to the list        
         genomes.clear();
         for (int i = 0; i < species.size(); i++) {
-            genomes.addAll(species.get(i).createOffspring(birds_per_species.get(i)));
+            genomes.addAll(species.get(i).createOffspring(birds_per_species_rounded.get(i)));
         }
     }
 
@@ -103,13 +128,5 @@ public class NEAT {
             // Take the total sum difference of this genome with all other genomes, and divide its score by that difference. That is the adjusted fitness
             genomes.get(g1).adjusted_score = (float) genomes.get(g1).score / total_differences[g1];
         }
-        
-    }
-
-    public static void main(String[] args) {
-        ArrayList<Double> fitness = new ArrayList<>();
-        double total_fitness = fitness.stream().mapToDouble(Double::doubleValue).sum();
-        System.out.println(total_fitness);
-
     }
 }

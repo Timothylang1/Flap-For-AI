@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Genome {
-    private HashMap<Integer, ArrayList<Gene>> genes = new HashMap<>();
+    public HashMap<Integer, ArrayList<Gene>> genes = new HashMap<>();
     private ArrayList<Neuron> neurons = new ArrayList<>(); // Used to ensure no cycles in node connections
     private static final Random RAND = new Random();
     public int score = 0; // Tells how well the genome does
@@ -233,7 +233,7 @@ public class Genome {
     /*
      * Calculates output of neural network by following along connections and passing output from one node to the next
      */
-    public double[] output(double[] initial_inputs) {        
+    public double[] output(double[] initial_inputs) {    
         // First create helper temporary hashmap
         HashMap<Integer, Double> inputs = new HashMap<>(); // KEY: the IDENTIFIER of the neuron, VALUE: the input for that neuron when the time is right
 
@@ -305,33 +305,13 @@ public class Genome {
         return new Genome(new_genes, g1.neurons);
     }
 
-
     public static void main(String[] args) {
-        Genome g1 = new Genome();
-        Genome g2 = new Genome();
-        g1.addRandomConnection();
-        g2.addRandomConnection();
-        Genome g3 = Genome.crossover(g1, g2);
-        Genome.crossover(g2, g1);
-        System.out.println(similar(g1, g2));
-        System.out.println(similar(g3, g2));
-        // double[] input = new double[]{1, 4, 9};
-        // double[] output = new double[Neural_Constants.NUM_OF_OUTPUTS];
-        // genome.addRandomConnection();
-        // output = genome.output(input);
-        // Genome.printOutput(output);
-        // genome.addRandomNode();
-        // genome.addRandomNode();
-        // for (int i = 0; i < 1000; i++) {
-        //     genome = genome.mutate(1).get(0);
-        // }
-        // output = genome.output(input);
-        // Genome.printOutput(output);
-    }
+        Genome test = new Genome();
+        test.addRandomConnection();
 
-    public static void printOutput(double[] output) {
-        System.out.println("Output:");
-        for (int i = 0; i < Neural_Constants.NUM_OF_OUTPUTS; i++) {
+        double[] output = test.output(new double[]{300, 5, 400});
+
+        for (int i = 0; i < 2; i++) {
             System.out.println(output[i]);
         }
     }
