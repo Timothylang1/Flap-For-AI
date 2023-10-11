@@ -2,7 +2,6 @@ package NEAT;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import Game.Bird;
 import Game.PipeHandler;
@@ -12,7 +11,6 @@ public class NEAT {
     ArrayList<Species> species = new ArrayList<>(); // Holds all of the currently active species
     ArrayList<Genome> genomes = new ArrayList<>(); // Holds all of the currently active genomes
     ArrayList<Bird> birds = new ArrayList<>(); // Holds the birds
-    private static final Random RAND = new Random();
     private int score = 0; // How many frames the birds survived
 
     public NEAT(PipeHandler pipes) {
