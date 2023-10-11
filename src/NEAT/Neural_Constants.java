@@ -19,4 +19,7 @@ public class Neural_Constants {
     public static final double AVERAGE_WEIGHT_COEFFICIENT = 1;
     public static final double EXCESS_DISJOINT_COEFFICIENT = 1;
 
+    // Starting population
+    public static final int POPULATION = 100;
+
 }

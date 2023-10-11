@@ -25,11 +25,11 @@ public class PipeHandler {
         double x = 0;
         while (x < Constants.CANVAS_WIDTH) {
             // Generate pipes
-            createPipe();
+            createPipes();
             x += Constants.HORIZONTAL_DISTANCE_BETWEEN_PIPES;
         }
         // Generates one more pipe so that we can't see the pipe being generated as it slides past
-        createPipe();
+        createPipes();
         // Assign the closest pipe as the main pipe that birds can collide into
         lower_pipe = pipe_images.get(0);
         upper_pipe = pipe_images.get(1);
@@ -60,7 +60,7 @@ public class PipeHandler {
     /*
      * Creates lower pipe, then upper pipe at calculated values
      */
-    private void createPipe() {
+    private void createPipes() {
         Image lowerPipe = new Image(0, 0, "Final/Pipe.png");
         lowerPipe.setScale(Constants.PIPE_SCALE);
         Image upperPipe = new Image(0, 0, "Final/Pipe.png");
@@ -87,7 +87,7 @@ public class PipeHandler {
         if (pipe_images.get(0).getCenter().getX() < -Constants.PIPE_WIDTH) {
             pipes.remove(pipe_images.remove(0)); // Remove lower pipe
             pipes.remove(pipe_images.remove(0)); // Remove upper pipe
-            createPipe();
+            createPipes();
         }
         pipe_images.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
         // Updates which pipe is currently the potential one for birds to collide into. If the birds successfully cross, then we update the score
@@ -100,7 +100,7 @@ public class PipeHandler {
     /*
      * Returns the current pipe that the birds can collide into
      */
-    public double[] getCurrentPipe() {
+    public double[] getCurrentPipesY() {
         return new double[]{lower_pipe.getCenter().getY() - Constants.PIPE_HEIGHT / 2, upper_pipe.getCenter().getY() + Constants.PIPE_HEIGHT / 2};
     }
 }

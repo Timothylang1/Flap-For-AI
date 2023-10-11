@@ -10,7 +10,8 @@ public class Genome {
     private HashMap<Integer, ArrayList<Gene>> genes = new HashMap<>();
     private ArrayList<Neuron> neurons = new ArrayList<>(); // Used to ensure no cycles in node connections
     private static final Random RAND = new Random();
-    public int score; // Tells how well the genome does
+    public int score = 0; // Tells how well the genome does
+    public double adjusted_score = 0;
 
     public Genome() {
         // Create the list of input/output neurons to begin with
@@ -120,37 +121,30 @@ public class Genome {
     }
 
     /*
-     * Returns a list of n genomes where n = number_of_mutations that were mutated off of this genome
+     * Returns mutated version of this genome
      */
-    public ArrayList<Genome> mutate(int number_of_mutations) {
-        ArrayList<Genome> mutations = new ArrayList<>();
+    public Genome mutate() {
+        // Create copy genome
+        Genome copy = copy();
 
-        // Calculate probabilities and execute mutations if nessecary
-        while (mutations.size() < number_of_mutations) {
-
-            // Create copy genome
-            Genome copy = copy();
-
-            // Calculate probabilities of mutation, then exectute mutation if the prob meets the threshold
-            double mutate_add_connection = RAND.nextDouble();
-            double mutate_add_node = RAND.nextDouble();
-            double mutate_modify_weight = RAND.nextDouble();
-            double mutate_modify_bias = RAND.nextDouble();
-            if (mutate_add_connection < Neural_Constants.MUTATE_ADD_CONNECTION) {
-                copy.addRandomConnection();
-            }
-            if (mutate_add_node < Neural_Constants.MUTATE_ADD_NODE) {
-                copy.addRandomNode();
-            }
-            if (mutate_modify_weight < Neural_Constants.MUTATE_MODIFY_WEIGHT) {
-                copy.mutateWeight();
-            }
-            if (mutate_modify_bias < Neural_Constants.MUTATE_MODIFY_BIAS) {
-                copy.mutateBias();
-            }
-            mutations.add(copy);
+        // Calculate probabilities of mutation, then exectute mutation if the prob meets the threshold
+        double mutate_add_connection = RAND.nextDouble();
+        double mutate_add_node = RAND.nextDouble();
+        double mutate_modify_weight = RAND.nextDouble();
+        double mutate_modify_bias = RAND.nextDouble();
+        if (mutate_add_connection < Neural_Constants.MUTATE_ADD_CONNECTION) {
+            copy.addRandomConnection();
         }
-        return mutations;
+        if (mutate_add_node < Neural_Constants.MUTATE_ADD_NODE) {
+            copy.addRandomNode();
+        }
+        if (mutate_modify_weight < Neural_Constants.MUTATE_MODIFY_WEIGHT) {
+            copy.mutateWeight();
+        }
+        if (mutate_modify_bias < Neural_Constants.MUTATE_MODIFY_BIAS) {
+            copy.mutateBias();
+        }
+        return copy;
     }
 
     /*
@@ -173,7 +167,7 @@ public class Genome {
     /*
      * Creates copies of the neurons and genes, then creates a new genome with the copies, then returns the genome
      */
-    private Genome copy() {
+    public Genome copy() {
         ArrayList<Neuron> copy_neurons = new ArrayList<>(neurons.stream().map(x -> x.copy()).toList());
         return new Genome(copyGenes(), copy_neurons);
     }
@@ -190,9 +184,10 @@ public class Genome {
     }
 
     /*
-     * Return true if the two genomes should belong to the same species because they're similar enough
+     * Return 1 if the two genomes should belong to the same species because they're similar enough
+     * Returns 0 if the birds are not similar
      */
-    public static boolean similar(Genome g1, Genome g2) {
+    public static int similar(Genome g1, Genome g2) {
         // First part, we copy the g2 map so we can edit when iterating through
         HashMap<Integer, ArrayList<Gene>> g2_map_copy = g2.copyGenes();
         
@@ -210,7 +205,7 @@ public class Genome {
                         Gene g2_gene = g2_map_copy.get(start_node).get(g2_map_copy.get(start_node).indexOf(g1_gene)); // Get the corresponding gene
                         sum_diff_weight += Math.abs(g2_gene.weight - g1_gene.weight);
                         similar_genes += 1;
-                        g2_map_copy.get(start_node).remove(g2_gene); // Then remove the gene from the copy
+                        g2_map_copy.get(start_node).remove(g2_gene); // Then remove the gene from the copy so it's not counted towards the excess genes after this loop
                     }
                     else {
                         disjoint_excess_genes += 1; // Otherwise, this is a disjoint gene because it doesn't appear in the g2 set
@@ -230,7 +225,8 @@ public class Genome {
         else average_weight_diff = sum_diff_weight / similar_genes;
 
         // Then return if the score
-        return Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT;
+        if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
+        else return 0; // Too different to belong to the same species
 
     }
 
