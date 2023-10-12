@@ -9,7 +9,7 @@ public class Bird extends Image {
 
     private double speed;
     private PipeHandler pipes;
-    public Genome gene;
+    private Genome gene;
     public boolean isAlive; // Tells if the bird is still alive
 
     public Bird(PipeHandler pipes, Genome gene) {
@@ -64,6 +64,12 @@ public class Bird extends Image {
      */
     private void jump() {
         double[] output = gene.output(getInputs());
+        // if (output[0] > 0) {
+        //     System.out.println(output[0]);
+        // }
+        // if (output[1] > 0) {
+        //     System.out.println(output[1]);
+        // }
         if (output[0] > output[1]) speed = -Constants.JUMPSPEED;
     }
 

@@ -309,7 +309,7 @@ public class Genome {
         Genome test = new Genome();
         test.addRandomConnection();
 
-        double[] output = test.output(new double[]{300, 5, 400});
+        double[] output = test.output(new double[]{100, 300, 400});
 
         for (int i = 0; i < 2; i++) {
             System.out.println(output[i]);

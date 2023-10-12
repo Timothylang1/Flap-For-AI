@@ -53,10 +53,12 @@ public class NEAT {
 
     public void reset() {
         createOffspring(); // Create new genomes
+        System.out.println(genomes.size());
         for (int i = 0; i < birds.size(); i++) { // Reset birds and reconnect to a new genome
-            birds.get(i).reset(genomes.get(0));
+            birds.get(i).reset(genomes.get(i));
         } 
         createSpecies(); // Create new species
+        System.out.println(species.size());
         score = 0; // Reset score
     }
 
@@ -118,13 +120,13 @@ public class NEAT {
     private void adjustFitness() {
         int[] total_differences = new int[genomes.size()]; // Holds all of the total differences for all the genomes
         for (int g1 = 0; g1 < genomes.size(); g1++) {
-            for (int g2 = g1 + 1; g2 < genomes.size(); g2++) {
+            for (int g2 = g1; g2 < genomes.size(); g2++) {
                 int difference = Genome.similar(genomes.get(g1), genomes.get(g2));
                 total_differences[g1] += difference;
                 total_differences[g2] += difference;
             }
             // Take the total sum difference of this genome with all other genomes, and divide its score by that difference. That is the adjusted fitness
-            genomes.get(g1).adjusted_score = (float) genomes.get(g1).score / total_differences[g1];
+            genomes.get(g1).adjusted_score = (double) genomes.get(g1).score / total_differences[g1];
         }
     }
 }
