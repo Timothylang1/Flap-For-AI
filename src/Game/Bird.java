@@ -5,6 +5,9 @@ import edu.macalester.graphics.Image;
 import NEAT.Genome;
 import NEAT.Neural_Constants;
 
+/*
+ * Main class that controls the bird
+ */
 public class Bird extends Image {
 
     private double speed;
@@ -64,12 +67,6 @@ public class Bird extends Image {
      */
     private void jump() {
         double[] output = gene.output(getInputs());
-        // if (output[0] > 0) {
-        //     System.out.println(output[0]);
-        // }
-        // if (output[1] > 0) {
-        //     System.out.println(output[1]);
-        // }
         if (output[0] > output[1]) speed = -Constants.JUMPSPEED;
     }
 

@@ -7,6 +7,9 @@ import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
+/*
+ * Controls the movement of the pipes
+ */
 public class PipeHandler {
 
     private final Random RAND = new Random();
@@ -19,6 +22,9 @@ public class PipeHandler {
         reset();
     }
 
+    /*
+     * Removes all pipes and generates new ones to replace them
+     */
     public void reset() {
         pipes.removeAll();
         pipe_images.clear();
@@ -35,6 +41,9 @@ public class PipeHandler {
         upper_pipe = pipe_images.get(1);
     }
 
+    /*
+     * Adds pipes to the canvas
+     */
     public void addPipesGroup(CanvasWindow canvas) {
         canvas.add(pipes);
     }
@@ -76,6 +85,9 @@ public class PipeHandler {
         pipe_images.add(upperPipe);
     }
 
+    /*
+     * Calculates the X coordinate of where the pipe should be placed
+     */
     private double calculateX() {
         if (pipe_images.size() == 0) { // This is only for the initial case when they're no images in the list yet. Spawns pipe offscreen
             return Constants.PIPE_STARTING_LOCATION_X;
@@ -83,6 +95,9 @@ public class PipeHandler {
         return (pipe_images.get(pipe_images.size() - 1).getCenter().getX() + Constants.HORIZONTAL_DISTANCE_BETWEEN_PIPES);
     }
 
+    /*
+     * Moves all the pipes, and removes them as they move off the screen
+     */
     public void move() {
         if (pipe_images.get(0).getCenter().getX() < -Constants.PIPE_WIDTH) {
             pipes.remove(pipe_images.remove(0)); // Remove lower pipe
@@ -98,7 +113,7 @@ public class PipeHandler {
     }
 
     /*
-     * Returns the current pipe that the birds can collide into
+     * Returns Y location of the current pipes the bird is going to collide into
      */
     public double[] getCurrentPipesY() {
         return new double[]{lower_pipe.getCenter().getY() - Constants.PIPE_HEIGHT / 2, upper_pipe.getCenter().getY() + Constants.PIPE_HEIGHT / 2};

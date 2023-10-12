@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/*
+ * Handles interactions between genomes as well as store information about each gene within the genome
+ */
 public class Genome {
     public HashMap<Integer, ArrayList<Gene>> genes = new HashMap<>();
     private ArrayList<Neuron> neurons = new ArrayList<>(); // Used to ensure no cycles in node connections
@@ -13,6 +16,9 @@ public class Genome {
     public int score = 0; // Tells how well the genome does
     public double adjusted_score = 0;
 
+    /*
+     * Creates basic neural network with all the input nodes and output nodes, but no connections
+     */
     public Genome() {
         // Create the list of input/output neurons to begin with
         for (int n = 0; n < Neural_Constants.NUM_OF_INPUTS + Neural_Constants.NUM_OF_OUTPUTS; n++) {
@@ -20,6 +26,9 @@ public class Genome {
         }
     }
 
+    /*
+     * Creates a genome, usually a copy of another genome
+     */
     public Genome(HashMap<Integer, ArrayList<Gene>> genes, ArrayList<Neuron> neurons) {
         this.genes = genes;
         this.neurons = neurons;
@@ -121,7 +130,8 @@ public class Genome {
     }
 
     /*
-     * Returns mutated version of this genome
+     * Creates a copy of this genome, then returns it but mutated slightly if chance or fate allows for it
+     * NOTE: ONLY ONE MUTATION ALLOWED
      */
     public Genome mutate() {
         // Create copy genome
@@ -135,13 +145,13 @@ public class Genome {
         if (mutate_add_connection < Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.addRandomConnection();
         }
-        if (mutate_add_node < Neural_Constants.MUTATE_ADD_NODE) {
+        else if (mutate_add_node < Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.addRandomNode();
         }
-        if (mutate_modify_weight < Neural_Constants.MUTATE_MODIFY_WEIGHT) {
+        else if (mutate_modify_weight < Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.mutateWeight();
         }
-        if (mutate_modify_bias < Neural_Constants.MUTATE_MODIFY_BIAS) {
+        else if (mutate_modify_bias < Neural_Constants.MUTATE_MODIFY_BIAS + Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.mutateBias();
         }
         return copy;
@@ -276,7 +286,7 @@ public class Genome {
     /*
      * Takes the most successful Genome and crossover with second genome. Crossover only looks at matching genes and picks randomly
      * between genes that match
-     * IMPORTANT: THE FIRST GENOME PASSED IN MUST HAVE A HIGHER SCORE SO IT'S PERSERVED
+     * IMPORTANT: THE FIRST GENOME PASSED IN MUST HAVE A HIGHER SCORE SO IT'S PERSERVED during the crossover
      */
     public static Genome crossover(Genome g1, Genome g2) {
         HashMap<Integer, ArrayList<Gene>> new_genes = new HashMap<>();
@@ -303,16 +313,5 @@ public class Genome {
             }
         });
         return new Genome(new_genes, g1.neurons);
-    }
-
-    public static void main(String[] args) {
-        Genome test = new Genome();
-        test.addRandomConnection();
-
-        double[] output = test.output(new double[]{100, 300, 400});
-
-        for (int i = 0; i < 2; i++) {
-            System.out.println(output[i]);
-        }
     }
 }

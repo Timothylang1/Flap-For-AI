@@ -7,12 +7,19 @@ import Game.Bird;
 import Game.PipeHandler;
 import edu.macalester.graphics.CanvasWindow;
 
+/*
+ * The main class that connectes species, genomes, and birds all together.
+ */
 public class NEAT {
     ArrayList<Species> species = new ArrayList<>(); // Holds all of the currently active species
     ArrayList<Genome> genomes = new ArrayList<>(); // Holds all of the currently active genomes
     ArrayList<Bird> birds = new ArrayList<>(); // Holds the birds
     private int score = 0; // How many frames the birds survived
 
+    /*
+     * Creates all birds and empty genomes. Since all the genomes are empty, they are the same, so we put them in a single species
+     * that we also create to begin the game.
+     */
     public NEAT(PipeHandler pipes) {
         // First, create a new species to begin with
         Genome gene = new Genome();
@@ -51,9 +58,11 @@ public class NEAT {
         return bird_still_alive;
     }
 
+    /*
+     * Resets NEAT by first creating all the new genomes, assigning genomes to birds, then assigning genomes to species
+     */
     public void reset() {
         createOffspring(); // Create new genomes
-        System.out.println(genomes.size());
         for (int i = 0; i < birds.size(); i++) { // Reset birds and reconnect to a new genome
             birds.get(i).reset(genomes.get(i));
         } 

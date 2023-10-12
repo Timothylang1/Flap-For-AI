@@ -1,6 +1,9 @@
 package Game;
 import edu.macalester.graphics.Image;
 
+/*
+ * Constants class that controls all of the dimensions of Flappy Bird
+ */
 public class Constants {
 
     // Ulitimate scale for size

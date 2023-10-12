@@ -1,5 +1,9 @@
 package NEAT;
 
+/*
+ * Gene class only holds the end connection as well as the weight. We didn't need to include the starter neuron in Gene because
+ * the Genome class has a hashmap where the key is the starter value and the value is the gene itself.
+ */
 public class Gene {
     public final int END_NODE;
     public double weight;
@@ -9,6 +13,9 @@ public class Gene {
         this.weight = weight;
     }
 
+    /*
+     * Returns a copy of this genome
+     */
     public Gene copy() {
         return new Gene(END_NODE, weight);
     }

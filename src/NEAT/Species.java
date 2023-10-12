@@ -3,10 +3,17 @@ package NEAT;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/*
+ * Class that takes care of species, which is essentailly a list of genomes that are closely related to each other.
+ */
 public class Species {
     private final Genome FOUNDATION; // The primary genome that will be used to see if potential genomes get added to this species
     private ArrayList<Genome> genomes = new ArrayList<>();
 
+    /*
+     * Takes in one genome as a foundation genome. This will be the one genome used to determine if a genome being added is similar enough to
+     * join the species
+     */
     public Species(Genome foundation) {
         FOUNDATION = foundation;
         genomes.add(foundation);
@@ -60,7 +67,7 @@ public class Species {
     }
 
     /*
-     * Returns top two genomes of best fit
+     * Returns the top n best fitness
      */
     private ArrayList<Genome> getBestFit() {
         if (genomes.size() == 1) genomes.add(genomes.get(0).copy()); // If there is only one genome in this list, then we create a copy of it for crossover and mutations

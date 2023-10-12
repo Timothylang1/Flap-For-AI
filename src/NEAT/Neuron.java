@@ -1,5 +1,8 @@
 package NEAT;
 
+/*
+ * Holds the information about each neuron in the neural network, mainly which activation function to use and its current bias
+ */
 public class Neuron {
     public double bias;
     public ActivationFunction function;
@@ -21,6 +24,9 @@ public class Neuron {
         return function.function(input) + bias; // Use activation function assigned to that neuron
     }
 
+    /*
+     * Creates a copy of the neuron by sending back a different object
+     */
     public Neuron copy() {
         return new Neuron(IDENTIFIER, function);
     }

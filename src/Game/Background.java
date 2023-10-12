@@ -5,6 +5,9 @@ import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Image;
 
+/*
+ * Class that handles background images moving across the screen
+ */
 public class Background {
 
     private GraphicsGroup upperImages = new GraphicsGroup(0, 0);
@@ -17,6 +20,9 @@ public class Background {
         reset();
     }
 
+    /*
+     * Removes all images and adds them back in at their proper location
+     */
     public void reset() {
         upperImages.removeAll();
         lowerImages.removeAll();
@@ -34,6 +40,9 @@ public class Background {
         generateBackground("Final/LowerBackground.png", lowimages, lowerImages, Constants.UPPER_BACKGROUND_HEIGHT + Constants.LOWER_BACKGROUND_HEIGHT / 2);
     }
 
+    /*
+     * Creates the image
+     */
     private void generateBackground(String filepath, ArrayList<Image> list, GraphicsGroup group, double y_location) {
         Image image = new Image(0, 0, filepath);
         image.setScale(Constants.BACKGROUND_SCALE);
@@ -44,6 +53,9 @@ public class Background {
         list.add(image);        
     }
 
+    /*
+     * Calculates the X coordinate of the image
+     */
     private double calculateX(ArrayList<Image> list) {
         if (list.size() == 0) { // This is only for the initial case when they're no images in the list yet
             return BG_IMAGE_WIDTH / 2;
@@ -51,6 +63,9 @@ public class Background {
         return (list.get(list.size() - 1).getCenter().getX() + BG_IMAGE_WIDTH) / 1.001; // The 1.001 is a random number that helps eliminate weird white space between background iamges (try removing to understand)
     }
 
+    /*
+     * Moves all the images, and gradually removes them as they exit the screen as well as add back in images to have a smooth flow
+     */
     public void move() {
         if (upimages.get(0).getCenter().getX() < -BG_IMAGE_WIDTH) {
             upperImages.remove(upimages.remove(0));
@@ -64,10 +79,16 @@ public class Background {
         lowimages.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
     }
 
+    /*
+     * Adds upper images
+     */
     public void addUpperBackground(CanvasWindow canvas) {
         canvas.add(upperImages);
     }
 
+    /*
+     * Adds lower images
+     */
     public void addLowerBackground(CanvasWindow canvas) {
         canvas.add(lowerImages);
     }

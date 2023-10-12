@@ -2,7 +2,9 @@ import Game.*;
 import NEAT.NEAT;
 import edu.macalester.graphics.*;
 
-
+/*
+ * Main class that brings all the classes together, and exectutes the main loop of the game
+ */
 public class Game {    
 
     private final CanvasWindow canvas = new CanvasWindow("Flap For AI", Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
@@ -29,6 +31,9 @@ public class Game {
         });
     }
 
+    /*
+     * Resets everything
+     */
     private void restartGame() {
         back.reset();
         pipes.reset();

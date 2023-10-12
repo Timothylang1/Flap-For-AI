@@ -1,5 +1,9 @@
 package NEAT;
 
+/*
+ * Constants class. Any variable used in our code for the neural network ends up here to allow ease of adjustment and because these variables
+ * are shared across multiple classes.
+ */
 public class Neural_Constants {
     public static final int NUM_OF_INPUTS = 3; // Total number of inputs to the neural network
     public static final int NUM_OF_OUTPUTS = 2; // Total number of outputs (node 1 represents jump, node 2 represents not jump)
