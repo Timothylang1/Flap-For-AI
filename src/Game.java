@@ -5,7 +5,7 @@ import edu.macalester.graphics.*;
 /*
  * Main class that brings all the classes together, and exectutes the main loop of the game
  */
-public class Game {    
+public class Game {
 
     private final CanvasWindow canvas = new CanvasWindow("Flap For AI", Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
     private final PipeHandler pipes = new PipeHandler();
