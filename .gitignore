@@ -3,3 +3,5 @@
 .settings/
 .project
 .vscode/
+bin/main/NEAT/Genome.class
+*.class

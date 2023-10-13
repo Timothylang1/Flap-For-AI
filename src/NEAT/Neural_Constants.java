@@ -19,7 +19,7 @@ public class Neural_Constants {
     public static final double MUTATE_MODIFY_BIAS = 0.075;
 
     // Difference calculator
-    public static final double DIFFERENCE_THRESHOLD = 2;
+    public static final double DIFFERENCE_THRESHOLD = 1;
     public static final double AVERAGE_WEIGHT_COEFFICIENT = 1;
     public static final double EXCESS_DISJOINT_COEFFICIENT = 1;
 

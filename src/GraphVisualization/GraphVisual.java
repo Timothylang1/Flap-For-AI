@@ -16,7 +16,7 @@ public class GraphVisual {
     public final int circle_radius = 40;
     private ArrayList<GraphNode> allNodes;
     public int totalNodes;
-    private HashMap<Integer, ArrayList<Integer>> connectionsMap; // NodeNumber --> List of connections
+    private HashMap<Integer, ArrayList<Gene>> genes; = new HashMap<>(); // NodeNumber --> List of connections
 
     public GraphVisual(ArrayList<Gene> geneList, int numInputNodes, int numOutputNodes) {
         // Create a graph visual using the neurons in a network.
