@@ -22,11 +22,13 @@ public class Game {
         neat.addBirds(canvas);
 
         canvas.animate(() -> {
-            back.move();
-            pipes.move();
-            score.updateScore();
-            if (!neat.move()) { // If all the birds have died (i.e. move returns false), then we reset the game and the neural networks
-                restartGame();
+            for (int i = 0; i < 2; i++) {
+                back.move();
+                pipes.move();
+                score.updateScore();
+                if (!neat.move()) { // If all the birds have died (i.e. move returns false), then we reset the game and the neural networks
+                    restartGame();
+                }
             }
         });
     }

@@ -1,7 +1,8 @@
 package NEAT;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 
 /*
  * Class that takes care of species, which is essentailly a list of genomes that are closely related to each other.
@@ -9,6 +10,7 @@ import java.util.Comparator;
 public class Species {
     private final Genome FOUNDATION; // The primary genome that will be used to see if potential genomes get added to this species
     private ArrayList<Genome> genomes = new ArrayList<>();
+    private static final Random RAND = new Random();
 
     /*
      * Takes in one genome as a foundation genome. This will be the one genome used to determine if a genome being added is similar enough to
@@ -31,19 +33,35 @@ public class Species {
     }
 
     /*
-     * Create offspring, and include the parents of the child into the new population
+     * Create offspring by doing roulette (each child has a percentage to be selected based on its score)
+     * We then crossover all the parents in pairs, then mutate them
      */
     public ArrayList<Genome> createOffspring(int num_of_offspring) {
-        ArrayList<Genome> next_generation = new ArrayList<>();
-        ArrayList<Genome> bestFit = getBestFit();
-        Genome child = Genome.crossover(bestFit.get(0), bestFit.get(1));
-        while (num_of_offspring != 0) {
-            if (!bestFit.isEmpty()) next_generation.add(bestFit.remove(0));
-            else next_generation.add(child.mutate());
-            num_of_offspring -= 1;
-        }
-        return next_generation;
+        // Get the total_score as well as the list of scores for this genome
+        int total_score = genomes.stream().mapToInt(x -> x.score).sum();
+        List<Integer> scores = genomes.stream().map(x -> x.score).toList();
 
+        // Choose parents using roulette
+        Genome[] parents = new Genome[num_of_offspring];
+        for (int i = 0; i < num_of_offspring; i++) {
+            parents[i] = genomes.get(roulette(scores, total_score));
+        }
+
+        // Mate parents (except if we have an odd number, then the last one gets chosen anyways)
+        ArrayList<Genome> children = new ArrayList<>();
+        for (int i = 1; i < num_of_offspring; i += 2) {
+            
+            // Whichever genome has the better score gets priority during the crossover, so we pass that in first for the crossover
+            Genome new_gene;
+            if (parents[i].score > parents[i - 1].score) new_gene = Genome.crossover(parents[i], parents[i - 1]);
+            else new_gene = Genome.crossover(parents[i - 1], parents[i]);
+            children.add(new_gene.mutate());
+            children.add(new_gene.mutate());
+        }
+        // If we have an odd number, then we will choose the last parent and add it in after mutating it
+        if (num_of_offspring % 2 == 1) children.add(parents[num_of_offspring - 1].mutate());
+        
+        return children;
     }
 
     /*
@@ -58,20 +76,18 @@ public class Species {
     }
 
     /*
-     * Helper class for sorting genomes from highest to lowest
+     * Returns index of next genome to pick using roulette style
      */
-    class SortGenomes implements Comparator<Genome> {
-        public int compare(Genome a, Genome b) {
-            return b.score - a.score;
+    private int roulette(List<Integer> scores, int total_sum) {
+        double score = RAND.nextDouble() * total_sum;
+        double tracker = 0;
+        for (int i = 0; i < scores.size(); i++) {
+            tracker += scores.get(i);
+            if (tracker >= score) {
+                return i;
+            }
         }
-    }
+        return scores.size() - 1; // On the off chance of weird rounding errors, we return the last index
 
-    /*
-     * Returns the top n best fitness
-     */
-    private ArrayList<Genome> getBestFit() {
-        if (genomes.size() == 1) genomes.add(genomes.get(0).copy()); // If there is only one genome in this list, then we create a copy of it for crossover and mutations
-        else genomes.sort(new SortGenomes()); // Otherwise we sort the genomes from highest fitness to lowest fitness
-        return new ArrayList<>(genomes.subList(0, 2));
     }
 }

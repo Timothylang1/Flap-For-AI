@@ -78,7 +78,7 @@ public class Genome {
         int node_number = neurons.size();
         neurons.add(RAND.nextInt(start_index, end_index), new Neuron(node_number, Neural_Constants.MIDDLE_FUNCTION));
 
-        // Create connections to connect in new neuron (IMPORTANT: DO NOT SWAP THE ORDER OF THESE BECAUSE OF HOW THEY ARE PLACED IN THE GENE SEQUENCE)
+        // Create connections to connect in new neuron
         // The weights are designed to maintain the original weight
         addConnection(node_number, to_break.END_NODE, to_break.weight);
         addConnection(start_identifier, node_number, 1);
@@ -138,20 +138,17 @@ public class Genome {
         Genome copy = copy();
 
         // Calculate probabilities of mutation, then exectute mutation if the prob meets the threshold
-        double mutate_add_connection = RAND.nextDouble();
-        double mutate_add_node = RAND.nextDouble();
-        double mutate_modify_weight = RAND.nextDouble();
-        double mutate_modify_bias = RAND.nextDouble();
-        if (mutate_add_connection < Neural_Constants.MUTATE_ADD_CONNECTION) {
+        double mutation = RAND.nextDouble();
+        if (mutation < Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.addRandomConnection();
         }
-        else if (mutate_add_node < Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
+        else if (mutation < Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.addRandomNode();
         }
-        else if (mutate_modify_weight < Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
+        else if (mutation < Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.mutateWeight();
         }
-        else if (mutate_modify_bias < Neural_Constants.MUTATE_MODIFY_BIAS + Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
+        else if (mutation < Neural_Constants.MUTATE_MODIFY_BIAS + Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.mutateBias();
         }
         return copy;
@@ -234,12 +231,23 @@ public class Genome {
         if (similar_genes == 0) average_weight_diff = 0;
         else average_weight_diff = sum_diff_weight / similar_genes;
 
+        // Calculate N (number of genes in a neural network) 
+        int N = Math.max(calculateN(g1.genes), calculateN(g2.genes));
+
         // Then return if the score
-        if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
+        if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT / N + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
         else return 0; // Too different to belong to the same species
 
     }
 
+    public static int calculateN(HashMap<Integer, ArrayList<Gene>> genes) {
+        int N = 0;
+        for (Integer key : genes.keySet()) {
+            N += genes.get(key).size();
+        }
+        return Math.max(N, 1); // For the initial case of when they're no genes
+    }
+    
     /*
      * Calculates output of neural network by following along connections and passing output from one node to the next
      */
@@ -295,7 +303,7 @@ public class Genome {
             if (g2.genes.keySet().contains(start_node)) {
                 ArrayList<Gene> new_end_connect = new ArrayList<>();
 
-                // Next, we check how many matching end genes we have
+                // Next, we check how many matching end genes we have starting from this specific node
                 connected_nodes.forEach(end_node -> {
                     if (g2.genes.get(start_node).contains(end_node)) { // If we have a matching gene, then we pick randomly which one gets chosen
                         if (RAND.nextInt() == 0) {
@@ -304,6 +312,9 @@ public class Genome {
                         else {
                             new_end_connect.add(end_node.copy()); // Take from g1 gene
                         }
+                    }
+                    else {
+                        new_end_connect.add(end_node.copy()); // If this gene doesn't have any matches in g2, then we just take it and copy it in
                     }
                 });
                 new_genes.put(start_node, new_end_connect);
