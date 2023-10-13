@@ -232,10 +232,10 @@ public class Genome {
         else average_weight_diff = sum_diff_weight / similar_genes;
 
         // Calculate N (number of genes in a neural network) 
-        int N = Math.max(calculateN(g1.genes), calculateN(g2.genes));
+        // int N = Math.max(calculateN(g1.genes), calculateN(g2.genes));
 
         // Then return if the score
-        if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT / N + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
+        if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
         else return 0; // Too different to belong to the same species
 
     }

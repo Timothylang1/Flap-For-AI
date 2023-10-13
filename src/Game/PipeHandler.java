@@ -15,8 +15,7 @@ public class PipeHandler {
     private final Random RAND = new Random();
     private GraphicsGroup pipes = new GraphicsGroup();
     private ArrayList<Image> pipe_images = new ArrayList<Image>();
-    private Image lower_pipe;
-    private Image upper_pipe;
+    private int tracker = 0; // Tracks the indexes of the current pipes that the bird can interact with
     
     public PipeHandler() {
         reset();
@@ -34,11 +33,12 @@ public class PipeHandler {
             createPipes();
             x += Constants.HORIZONTAL_DISTANCE_BETWEEN_PIPES;
         }
+
         // Generates one more pipe so that we can't see the pipe being generated as it slides past
         createPipes();
-        // Assign the closest pipe as the main pipe that birds can collide into
-        lower_pipe = pipe_images.get(0);
-        upper_pipe = pipe_images.get(1);
+        
+        // Reset tracker
+        tracker = 0;
     }
 
     /*
@@ -60,10 +60,10 @@ public class PipeHandler {
 
         // Check for collision
         return 
-        lower_pipe.getElementAt(SE.getX(), SE.getY()) != null || 
-        lower_pipe.getElementAt(SW.getX(), SW.getY()) != null || 
-        upper_pipe.getElementAt(NE.getX(), NE.getY()) != null || 
-        upper_pipe.getElementAt(NW.getX(), NW.getY()) != null;
+        pipe_images.get(tracker).getElementAt(SE.getX(), SE.getY()) != null || // Check colisions with lower pipe
+        pipe_images.get(tracker).getElementAt(SW.getX(), SW.getY()) != null || 
+        pipe_images.get(tracker + 1).getElementAt(NE.getX(), NE.getY()) != null || // Check collisions with upper pipe
+        pipe_images.get(tracker + 1).getElementAt(NW.getX(), NW.getY()) != null;
     }
 
     /*
@@ -77,8 +77,8 @@ public class PipeHandler {
         upperPipe.rotateBy(180);
         double y_placement = RAND.nextDouble() * (Constants.UPPER_BACKGROUND_HEIGHT - Constants.VERTICAL_DISTANCE_BETWEEN_PIPES);
         double x_placement = calculateX();
-        lowerPipe.setCenter(x_placement, y_placement + Constants.VERTICAL_DISTANCE_BETWEEN_PIPES + lowerPipe.getHeight() * Constants.PIPE_SCALE / 2);
-        upperPipe.setCenter(x_placement, -upperPipe.getHeight() * Constants.PIPE_SCALE / 2 + y_placement);
+        lowerPipe.setCenter(x_placement, y_placement + Constants.VERTICAL_DISTANCE_BETWEEN_PIPES + Constants.PIPE_HEIGHT / 2);
+        upperPipe.setCenter(x_placement, -Constants.PIPE_HEIGHT / 2 + y_placement);
         pipes.add(lowerPipe);
         pipes.add(upperPipe);
         pipe_images.add(lowerPipe);
@@ -103,19 +103,34 @@ public class PipeHandler {
             pipes.remove(pipe_images.remove(0)); // Remove lower pipe
             pipes.remove(pipe_images.remove(0)); // Remove upper pipe
             createPipes();
+            tracker -= 2; // Shifts the index by two
         }
         pipe_images.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
         // Updates which pipe is currently the potential one for birds to collide into. If the birds successfully cross, then we update the score
-        if (lower_pipe.getCenter().getX() + Constants.PIPE_WIDTH / 2 < Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2) {
-            lower_pipe = pipe_images.get(pipe_images.indexOf(lower_pipe) + 2);
-            upper_pipe = pipe_images.get(pipe_images.indexOf(upper_pipe) + 2);
+        if (pipe_images.get(tracker).getCenter().getX() + Constants.PIPE_WIDTH / 2 < Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2) {
+            tracker += 2; // Shift the index to the next series of pipes
         }
     }
 
     /*
-     * Returns Y location of the current pipes the bird is going to collide into
+     * Returns Y location of the gap for the next 2 pipe sets
      */
     public double[] getCurrentPipesY() {
-        return new double[]{lower_pipe.getCenter().getY() - Constants.PIPE_HEIGHT / 2, upper_pipe.getCenter().getY() + Constants.PIPE_HEIGHT / 2};
+        return new double[]{
+            pipe_images.get(tracker).getCenter().getY() - Constants.PIPE_HEIGHT / 2, // Lower pipe of the upcoming set
+            pipe_images.get(tracker + 1).getCenter().getY() + Constants.PIPE_HEIGHT / 2, // Upper pipe of the upcoming set
+            pipe_images.get(tracker + 2).getCenter().getY() - Constants.PIPE_HEIGHT / 2, // Lower pipe for the next incoming set
+            pipe_images.get(tracker + 3).getCenter().getY() + Constants.PIPE_HEIGHT / 2, // Upper pipe for the next incoming set
+        };
+    }
+
+    /*
+     * Returns the distance between the bird and the next two sets of pipes
+     */
+    public double[] getCurrentPipesX() {
+        return new double[] {
+            pipe_images.get(tracker).getCenter().getX() - Constants.PIPE_WIDTH / 2 - Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2, // Distance between the edge of the pipe to the edge of the bird
+            pipe_images.get(tracker + 2).getCenter().getX() - Constants.PIPE_WIDTH / 2 - Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2 // Distance between the edge of the next set of pipes to the edge of the bird
+        };
     }
 }
