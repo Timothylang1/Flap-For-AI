@@ -3,4 +3,4 @@
 .settings/
 .project
 .vscode/
-.bin/
+bin/
