@@ -5,7 +5,6 @@ import java.util.List;
 
 import Game.Bird;
 import Game.PipeHandler;
-import GraphVisualization.GraphVisual;
 import edu.macalester.graphics.CanvasWindow;
 
 /*
@@ -140,16 +139,18 @@ public class NEAT {
         }
     }
 
-    public void drawBest(CanvasWindow canvas) {
+    /*
+     * Gets most fit genome out of all genomes
+     */
+    public Genome getBest() {
         int maxScore = 0;
-        Genome fittestGenome = null;
+        Genome fittest_genome = null;
         for (Genome genome : genomes) {
             if (genome.score > maxScore) {
                 maxScore = genome.score;
-                fittestGenome = genome;
+                fittest_genome = genome;
             }
         }
-        GraphVisual gv = new GraphVisual(canvas);
-        gv.update(fittestGenome.genes);
+        return fittest_genome;
     }
 }

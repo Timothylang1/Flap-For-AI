@@ -1,4 +1,5 @@
 import Game.*;
+import GraphVisualization.GraphVisual;
 import NEAT.NEAT;
 import edu.macalester.graphics.*;
 
@@ -6,12 +7,13 @@ import edu.macalester.graphics.*;
  * Main class that brings all the classes together, and exectutes the main loop of the game
  */
 public class Game {
-    private final CanvasWindow canvas2 = new CanvasWindow("Neural Network", 500, 500);
     private final CanvasWindow canvas = new CanvasWindow("Flap For AI", Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
+    private final CanvasWindow canvas2 = new CanvasWindow("Neural Network", 500, 500);
     private final PipeHandler pipes = new PipeHandler();
     private final Background back = new Background();
     private final Score score = new Score();
     private final NEAT neat = new NEAT(pipes);
+    private final GraphVisual gv = new GraphVisual(canvas2);
 
     public Game() {
         // Add objects to canvas in correct order
@@ -40,7 +42,7 @@ public class Game {
         back.reset();
         pipes.reset();
         score.reset();
-        neat.drawBest(canvas2);
+        gv.update(neat.getBest().genes);
         neat.reset();
     }
 

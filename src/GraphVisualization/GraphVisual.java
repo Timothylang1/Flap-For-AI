@@ -36,7 +36,7 @@ public class GraphVisual {
         // Figure out how many layers there are
         int maxLayer = 0;
         HashMap<Integer, Integer> layerOrders = layering_nodes();
-        System.out.println("This is nodeToLayer " + layerOrders);
+
         for (Integer i : layerOrders.keySet()) {
             maxLayer = Math.max(maxLayer, layerOrders.get(i));
         }
@@ -50,7 +50,7 @@ public class GraphVisual {
         for (Integer nodeNumber : layerOrders.keySet()) {
             layerNodes.get(layerOrders.get(nodeNumber)).add(nodeNumber);
         }
-        System.out.println("This is layerNodes: " + layerNodes);
+
 
         double canvasWidthSegment = canvas.getWidth()/(maxLayer*2);
         double x = canvasWidthSegment;
