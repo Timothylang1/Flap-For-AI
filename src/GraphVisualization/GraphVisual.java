@@ -12,28 +12,22 @@ import NEAT.Neural_Constants;
 
 
 public class GraphVisual {
-    public final CanvasWindow canvas = new CanvasWindow("Neural Network", 500, 500);
+    private CanvasWindow canvas;
     public final int circle_radius = 40;
     private ArrayList<GraphNode> allNodes;
     public int totalNodes;
-    private HashMap<Integer, ArrayList<Gene>> genes; = new HashMap<>(); // NodeNumber --> List of connections
+    private HashMap<Integer, ArrayList<Gene>> genes; // NodeNumber --> List of connections
 
-    public GraphVisual(ArrayList<Gene> geneList, int numInputNodes, int numOutputNodes) {
+    public GraphVisual(CanvasWindow canvas, HashMap<Integer, ArrayList<Gene>> genes, int numInputNodes, int numOutputNodes) {
         // Create a graph visual using the neurons in a network.
         // Each neuron has a bunch of neurons it's connected to
         // ArrayList<Neuron> neurons = network.neurons;
-
+        this.canvas = canvas;
         allNodes = new ArrayList<GraphNode>();
-        connectionsMap = new HashMap<Integer, ArrayList<Integer>>();
+        this.genes = genes;
 
-        totalNodes = 0;
-        for (Gene g : geneList) {
-            if (g.INITIAL_NODE > totalNodes) {
-                totalNodes = g.INITIAL_NODE;
-            }
-        }
+        totalNodes = genes.size();
 
-        totalNodes += 1; // Adjust since our node numbers start at 0
         double middleNodeX = canvas.getWidth()/2 - 2*circle_radius;
         double middleNodeY = canvas.getHeight()/2;
 
@@ -47,10 +41,9 @@ public class GraphVisual {
             middleNodeX += circle_radius;
         }
 
-        connect_nodes(geneList, numInputNodes, numOutputNodes);
-        store_connections(geneList);
+        connect_nodes();
 
-        System.out.println(connectionsMap);
+
     }
 
     /**
@@ -95,77 +88,43 @@ public class GraphVisual {
 
     /**
      * Draws the connections between 2 nodes
-     * @param geneList
-     * @param numInputNodes
-     * @param numOutputNodes
      */
-    public void connect_nodes(ArrayList<Gene> geneList, int numInputNodes, int numOutputNodes) {
-        for (Gene g : geneList) {
-            connect_two_nodes(allNodes.get(g.INITIAL_NODE), allNodes.get(g.END_NODE));
-        }
-    }
-
-    /**
-     * Stores what nodes that a node is connected to 
-     * @param geneList
-     */
-    private void store_connections(ArrayList<Gene> geneList) {
-        for (Gene g : geneList) {
-            if (connectionsMap.containsKey(g.INITIAL_NODE)) {
-                connectionsMap.get(g.INITIAL_NODE).add(g.END_NODE);
-            } else {
-                connectionsMap.put(g.INITIAL_NODE, new ArrayList<Integer>());
-                connectionsMap.get(g.INITIAL_NODE).add(g.END_NODE);
+    public void connect_nodes() {
+        for (int key : genes.keySet()) {
+            System.out.println("This is my key: " + key);
+            for (Gene gene : genes.get(key)) {
+                connect_two_nodes(allNodes.get(key), allNodes.get(gene.END_NODE));
             }
         }
     }
 
-    private void layering_nodes(ArrayList<Gene> geneList, int numInputNodes) {
-        ArrayList<Integer> layer = new ArrayList<Integer>();
+    // private void layering_nodes(ArrayList<Gene> geneList, int numInputNodes) {
+    //     ArrayList<Integer> layer = new ArrayList<Integer>();
 
-        // Start off with input layer
-        for (int i = 0; i < numInputNodes; i++) {
-            layer.add(i);
-        }
+    //     // Start off with input layer
+    //     for (int i = 0; i < numInputNodes; i++) {
+    //         layer.add(i);
+    //     }
 
-        ArrayList<Integer> layer2 = new ArrayList<Integer>();
-        for (int i : layer) {
-            for (int j : connectionsMap.get(i)) {
-                // If node is in layer already, don't add it
-                if (!layer2.contains(j)) {
-                    layer2.add(j);
-                }
-            }
-        }
+    //     ArrayList<Integer> layer2 = new ArrayList<Integer>();
+    //     for (int i : layer) {
+    //         for (int j : connectionsMap.get(i)) {
+    //             // If node is in layer already, don't add it
+    //             if (!layer2.contains(j)) {
+    //                 layer2.add(j);
+    //             }
+    //         }
+    //     }
 
-        // Check if a node is connected to another node within the layer
-        for (int i : layer2) {
-            connectionsMap.get(i);
-        }
-    }
+    //     // Check if a node is connected to another node within the layer
+    //     for (int i : layer2) {
+    //         connectionsMap.get(i);
+    //     }
+    // }
 
 
     public static void main(String[] args) {
 
-     
-        
-        
-        
-        
-        // GraphNode node1 = vis.getInputNodes().get(0);
-        // GraphNode node5 = vis.getOutputNodes().get(1);
-
-        
-
-
-        // vis.connect_two_nodes(node1, node5);
-
-        // Use a list of genes to make visual
-
-        // GraphNode testNode = new GraphNode(40, 40, vis.circle_radius, vis.canvas);
-        // GraphNode testNode1 = new GraphNode(80, 40, vis.circle_radius, vis.canvas);
-        // vis.add_graph_node(testNode);
-        // vis.add_graph_node(testNode1);
 
 
         
