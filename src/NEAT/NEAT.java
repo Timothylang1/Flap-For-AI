@@ -149,6 +149,7 @@ public class NEAT {
                 fittestGenome = genome;
             }
         }
-        GraphVisual gv = new GraphVisual(canvas, fittestGenome.genes, Neural_Constants.NUM_OF_INPUTS, Neural_Constants.NUM_OF_OUTPUTS);
+        GraphVisual gv = new GraphVisual(canvas);
+        gv.update(fittestGenome.genes);
     }
 }
