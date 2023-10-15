@@ -4,7 +4,6 @@ package NEAT;
  * Holds the information about each neuron in the neural network, mainly which activation function to use and its current bias
  */
 public class Neuron {
-    public double bias;
     public ActivationFunction function;
     public final int IDENTIFIER;
 
@@ -14,14 +13,13 @@ public class Neuron {
     public Neuron(int identifier, ActivationFunction function) {
         this.function = function;
         IDENTIFIER = identifier;
-        bias = 0; // Start with an initial bias of 0;
     }
 
     /*
      * Calculates output using the activation function and bias
      */
     public double calculateOutput(double input) {
-        return function.function(input) + bias; // Use activation function assigned to that neuron
+        return function.function(input); // Use activation function assigned to that neuron
     }
 
     /*

@@ -34,10 +34,16 @@ public class Constants {
     public static final int CANVAS_WIDTH = 400;
     public static final int CANVAS_HEIGHT = (int) (UPPER_BACKGROUND_HEIGHT + new Image(0, 0, "Final/LowerBackground.png").getHeight() * BACKGROUND_SCALE);
 
+    public static final int CANVAS2_WIDTH = 800;
+    public static final int CANVAS2_HEIGHT = 800;    
+
      // Pipe
     public static final double PIPE_SCALE = 0.2;
     public static final double PIPE_WIDTH = new Image(0, 0, "Final/Pipe.png").getWidth() * PIPE_SCALE;
     public static final double PIPE_HEIGHT = new Image(0, 0, "Final/Pipe.png").getHeight() * PIPE_SCALE;
     public static final double PIPE_STARTING_LOCATION_X = CANVAS_WIDTH + PIPE_WIDTH;
+
+    // Max score
+    public static final int MAX_SCORE = 200;
 }
 

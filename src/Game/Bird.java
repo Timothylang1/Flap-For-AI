@@ -75,17 +75,17 @@ public class Bird extends Image {
      */
     private double[] getInputs() {
         // Create inputs
-        double[] inputs = new double[Neural_Constants.NUM_OF_INPUTS];
+        double[] inputs = new double[Neural_Constants.NUM_OF_MAX_INPUTS];
         double[] pipe_locations_Y = pipes.getCurrentPipesY();
         double[] pipe_location_X = pipes.getCurrentPipesX();
         inputs[0] = getCenter().getY(); // Bird's Y Location
         inputs[1] = pipe_locations_Y[0]; // Lower pipe y location for the gap
         inputs[2] = pipe_locations_Y[1]; // Upper pipe y location for the gap
-        // inputs[3] = pipe_locations_Y[2]; // Lower pipe y location for the set of pipes after this current one for the gap
-        // inputs[4] = pipe_locations_Y[3]; // Upper pipe y location for the set of pipes after this current one for the gap
-        // inputs[5] = speed; // The current velocity of the bird
-        // inputs[6] = pipe_location_X[0]; // The distance between the upcoming set of pipes and the bird
-        // inputs[7] = pipe_location_X[1]; // The distance between the next set of pipes and the bird
+        inputs[3] = pipe_locations_Y[2]; // Lower pipe y location for the set of pipes after this current one for the gap
+        inputs[4] = pipe_locations_Y[3]; // Upper pipe y location for the set of pipes after this current one for the gap
+        inputs[5] = speed; // The current velocity of the bird
+        inputs[6] = pipe_location_X[0]; // The distance between the upcoming set of pipes and the bird
+        inputs[7] = pipe_location_X[1]; // The distance between the next set of pipes and the bird
         return inputs;
     }
 

@@ -3,7 +3,6 @@ package GraphVisualization;
 import edu.macalester.graphics.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import NEAT.Gene;
@@ -11,19 +10,26 @@ import NEAT.Neural_Constants;
 
 
 public class GraphVisual {
-    private CanvasWindow canvas;
     private HashMap<Integer, GraphNode> allNodes;
     public int totalNodes;
     private HashMap<Integer, ArrayList<Gene>> genes;
+    private final InfoText info;
+    CanvasWindow canvas;
+
+    public static final int CANVAS_WIDTH = 800;
+    public static final int CANVAS_HEIGHT = 800;    
 
     public GraphVisual(CanvasWindow canvas) {
         // Adds the GraphicsGroups GraphEdge and GraphNode onto the canvas
         // Sets up the list to hold all nodes
         this.canvas = canvas;
+        info = new InfoText(canvas);
+        info.setCenter(canvas.getWidth() - info.getWidth(), info.getHeight() / 2 + 5);
         allNodes = new HashMap<Integer, GraphNode>();
 
         canvas.add(GraphEdge.edges);
         canvas.add(GraphNode.nodes);
+        canvas.add(info);
 
     }
 
@@ -83,7 +89,7 @@ public class GraphVisual {
         }
     }
 
-    public void update(HashMap<Integer, ArrayList<Gene>> genes) {
+    public void reset(HashMap<Integer, ArrayList<Gene>> genes, int species, int score) {
         this.genes = genes;
         allNodes.clear();
 
@@ -93,6 +99,8 @@ public class GraphVisual {
         setup();
 
         connect_nodes();
+
+        info.update(species, score);
     }
 
     public HashMap<Integer, Integer> layering_nodes() {
@@ -153,29 +161,5 @@ public class GraphVisual {
         }
 
         GraphEdge.SCALE = GraphEdge.MAX_WIDTH/maxWeight;
-    }
-
-    public static void main(String[] args) {
-        HashMap<Integer, ArrayList<Gene>> genes = new HashMap<Integer, ArrayList<Gene>>();
-        // genes.put(0, new ArrayList<Gene>(Arrays.asList(new Gene(8, 1))));
-
-        HashMap<Integer, ArrayList<Gene>> genes1 = new HashMap<Integer, ArrayList<Gene>>();
-        genes1.put(0, new ArrayList<Gene>(Arrays.asList(new Gene(10, 50))));
-        genes1.put(10, new ArrayList<Gene>(Arrays.asList(new Gene(11, 10))));
-        genes1.put(11, new ArrayList<Gene>(Arrays.asList(new Gene(12, -10))));
-        genes1.put(1, new ArrayList<Gene>(Arrays.asList(new Gene(13, -10))));
-        genes1.put(14, new ArrayList<Gene>(Arrays.asList(new Gene(8, -10))));
-        genes1.put(2, new ArrayList<Gene>(Arrays.asList(new Gene(9, -10))));
-        genes1.put(12, new ArrayList<Gene>(Arrays.asList(new Gene(13, -10))));
-        genes1.put(13, new ArrayList<Gene>(Arrays.asList(new Gene(14, -10))));
-
-        CanvasWindow canvas = new CanvasWindow("Testing Graph", GraphVisual_Constants.CANVAS_WIDTH, GraphVisual_Constants.CANVAS_HEIGHT);
-        
-
-        GraphVisual gv = new GraphVisual(canvas);
-        // gv.update(genes);
-        gv.update(genes1);
-
-        gv.layering_nodes();
     }
 }

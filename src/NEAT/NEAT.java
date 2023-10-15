@@ -11,9 +11,9 @@ import edu.macalester.graphics.CanvasWindow;
  * The main class that connectes species, genomes, and birds all together.
  */
 public class NEAT {
-    ArrayList<Species> species = new ArrayList<>(); // Holds all of the currently active species
-    ArrayList<Genome> genomes = new ArrayList<>(); // Holds all of the currently active genomes
-    ArrayList<Bird> birds = new ArrayList<>(); // Holds the birds
+    private ArrayList<Species> species = new ArrayList<>(); // Holds all of the currently active species
+    private ArrayList<Genome> genomes = new ArrayList<>(); // Holds all of the currently active genomes
+    private ArrayList<Bird> birds = new ArrayList<>(); // Holds the birds
     private int score = 0; // How many frames the birds survived
 
     /*
@@ -67,7 +67,6 @@ public class NEAT {
             birds.get(i).reset(genomes.get(i));
         } 
         createSpecies(); // Create new species
-        System.out.println(species.size());
         score = 0; // Reset score
     }
 
@@ -152,5 +151,12 @@ public class NEAT {
             }
         }
         return fittest_genome;
+    }
+
+    /*
+     * 
+     */
+    public int getNumSpecies() {
+        return species.size();
     }
 }

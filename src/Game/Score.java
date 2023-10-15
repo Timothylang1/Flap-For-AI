@@ -7,7 +7,7 @@ import edu.macalester.graphics.GraphicsText;
  */
 public class Score extends GraphicsText {
 
-    private int score = 0;
+    public int score = 0;
     private double current_pipe_location = Constants.PIPE_STARTING_LOCATION_X;
 
     public Score() {

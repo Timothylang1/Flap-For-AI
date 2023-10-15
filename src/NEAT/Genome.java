@@ -148,9 +148,6 @@ public class Genome {
         else if (mutation < Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
             copy.mutateWeight();
         }
-        else if (mutation < Neural_Constants.MUTATE_MODIFY_BIAS + Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
-            copy.mutateBias();
-        }
         return copy;
     }
 
@@ -162,13 +159,6 @@ public class Genome {
             int random_starting_node = new ArrayList<>(genes.keySet()).get(RAND.nextInt(genes.keySet().size()));
             genes.get(random_starting_node).get(RAND.nextInt(genes.get(random_starting_node).size())).weight += RAND.nextDouble(-Neural_Constants.DIFFERENTIAL / 2, Neural_Constants.DIFFERENTIAL / 2);
         }
-    }
-
-    /*
-     * Pick a random bias from the nodes then mutate slightly (except for the starter nodes, their bias should always remain 0)
-     */
-    private void mutateBias() {
-        neurons.get(RAND.nextInt(Neural_Constants.NUM_OF_INPUTS, neurons.size())).bias += RAND.nextDouble(-Neural_Constants.DIFFERENTIAL / 2, Neural_Constants.DIFFERENTIAL / 2);
     }
 
     /*
