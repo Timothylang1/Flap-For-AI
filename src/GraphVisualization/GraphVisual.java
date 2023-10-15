@@ -5,20 +5,14 @@ import edu.macalester.graphics.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.ArrayDeque;
 
-import Game.PipeHandler;
-import NEAT.Neuron;
 import NEAT.Gene;
 import NEAT.Neural_Constants;
 
 
 public class GraphVisual {
     private CanvasWindow canvas;
-    private ArrayList<GraphNode> allNodes;
+    private HashMap<Integer, GraphNode> allNodes;
     public int totalNodes;
     private HashMap<Integer, ArrayList<Gene>> genes;
 
@@ -26,20 +20,11 @@ public class GraphVisual {
         // Adds the GraphicsGroups GraphEdge and GraphNode onto the canvas
         // Sets up the list to hold all nodes
         this.canvas = canvas;
-        allNodes = new ArrayList<GraphNode>();
+        allNodes = new HashMap<Integer, GraphNode>();
 
         canvas.add(GraphEdge.edges);
         canvas.add(GraphNode.nodes);
 
-    }
-
-    /**
-     * Visually connects two neurons in the network.
-     * @param n1
-     * @param n2
-     */
-    public void connect_two_nodes(GraphNode node1, GraphNode node2, double weight) {
-        new GraphEdge(node1.getCenter(), node2.getCenter(), weight);
     }
 
     /**
@@ -75,8 +60,9 @@ public class GraphVisual {
             // Put the nodes onto the canvas
             double y = canvasHeightSegment;
             for (int nodeNumber : layerNodes.get(currLayer)) {
-                GraphNode node = new GraphNode(x, y, GraphNode.circle_radius, canvas);
-                allNodes.add(node);
+                GraphNode node = new GraphNode(nodeNumber, x, y, GraphNode.circle_radius, canvas);
+                allNodes.put(nodeNumber, node);
+                // canvas.add(node.getText());
                 y += canvasHeightSegment;
             }
             x += canvasWidthSegment * 2;
@@ -99,10 +85,10 @@ public class GraphVisual {
 
     public void update(HashMap<Integer, ArrayList<Gene>> genes) {
         this.genes = genes;
-        // allNodes.clear();
+        allNodes.clear();
 
-        // GraphEdge.reset();
-        // GraphNode.reset();
+        GraphEdge.reset();
+        GraphNode.reset();
 
         setup();
 
