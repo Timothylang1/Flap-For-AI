@@ -140,15 +140,15 @@ public class NEAT {
         }
     }
 
-    // public void drawBest(CanvasWindow canvas) {
-    //     int maxScore = 0;
-    //     Genome fittestGenome = null;
-    //     for (Genome genome : genomes) {
-    //         if (genome.score > maxScore) {
-    //             maxScore = genome.score;
-    //             fittestGenome = genome;
-    //         }
-    //     }
-    //     GraphVisual gv = new GraphVisual(canvas, fittestGenome.genes, Neural_Constants.NUM_OF_INPUTS, Neural_Constants.NUM_OF_OUTPUTS);
-    // }
+    public void drawBest(CanvasWindow canvas) {
+        int maxScore = 0;
+        Genome fittestGenome = null;
+        for (Genome genome : genomes) {
+            if (genome.score > maxScore) {
+                maxScore = genome.score;
+                fittestGenome = genome;
+            }
+        }
+        GraphVisual gv = new GraphVisual(canvas, fittestGenome.genes, Neural_Constants.NUM_OF_INPUTS, Neural_Constants.NUM_OF_OUTPUTS);
+    }
 }

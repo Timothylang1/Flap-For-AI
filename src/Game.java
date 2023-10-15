@@ -40,7 +40,7 @@ public class Game {
         back.reset();
         pipes.reset();
         score.reset();
-        // neat.drawBest(canvas2);
+        neat.drawBest(canvas2);
         neat.reset();
     }
 
