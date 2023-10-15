@@ -14,12 +14,12 @@ public class Neural_Constants {
 
     // Chances of mutations
     public static final double MUTATE_ADD_CONNECTION = 0.075;
-    public static final double MUTATE_ADD_NODE = 0.075;
+    public static final double MUTATE_ADD_NODE = 0.015;
     public static final double MUTATE_MODIFY_WEIGHT = 0.075;
     public static final double MUTATE_MODIFY_BIAS = 0.075;
 
     // Difference calculator
-    public static final double DIFFERENCE_THRESHOLD = 3;
+    public static final double DIFFERENCE_THRESHOLD = 10;
     public static final double AVERAGE_WEIGHT_COEFFICIENT = 1;
     public static final double EXCESS_DISJOINT_COEFFICIENT = 1;
 

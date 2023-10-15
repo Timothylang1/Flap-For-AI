@@ -22,7 +22,7 @@ public class Game {
         neat.addBirds(canvas);
 
         canvas.animate(() -> {
-            for (int i = 0; i < Constants.FRAMESPEED; i++) {
+            for (int i = 0; i < Constants.FRAMESPEEDSCALAR; i++) {
                 back.move();
                 pipes.move();
                 score.updateScore();
