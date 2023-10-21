@@ -13,7 +13,7 @@ public class Neural_Constants {
     public static final ActivationFunction MIDDLE_FUNCTION = x -> Math.max(0, x);
     public static final ActivationFunction INPUT_OUTPUT_FUNCTION = x -> x;
 
-    // Chances of mutations
+    // Chances of mutations (has to be less than 1)
     public static final double MUTATE_ADD_CONNECTION = 0.075;
     public static final double MUTATE_ADD_NODE = 0.005;
     public static final double MUTATE_MODIFY_WEIGHT = 0.075;
