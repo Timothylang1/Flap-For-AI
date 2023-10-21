@@ -84,7 +84,7 @@ public class GraphVisual {
         for (int key : genes.keySet()) {
             // System.out.println("This is my key: " + key);
             for (Gene gene : genes.get(key)) {
-                new GraphEdge(allNodes.get(key).getCenter(), allNodes.get(gene.END_NODE).getCenter(), gene.weight * GraphEdge.SCALE);
+                new GraphEdge(allNodes.get(key).getCenter(), allNodes.get(gene.END_NODE).getCenter(), gene.weight);
             }
         }
     }
@@ -160,6 +160,7 @@ public class GraphVisual {
             maxWeight = Math.max(genes.get(key).stream().mapToDouble(x -> Math.abs(x.weight)).max().getAsDouble(), maxWeight);
         }
 
-        GraphEdge.SCALE = GraphEdge.MAX_WIDTH/maxWeight;
+        GraphEdge.SCALE_WIDTH = GraphEdge.MAX_WIDTH/maxWeight;
+        GraphEdge.SCALE_OPACITY = GraphEdge.MAX_OPACITY/maxWeight;
     }
 }
