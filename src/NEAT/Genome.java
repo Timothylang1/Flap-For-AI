@@ -221,23 +221,12 @@ public class Genome {
         if (similar_genes == 0) average_weight_diff = 0;
         else average_weight_diff = sum_diff_weight / similar_genes;
 
-        // Calculate N (number of genes in a neural network) 
-        int N = Math.max(calculateN(g1.genes), calculateN(g2.genes));
-
         // Then return if the score
         if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
         else return 0; // Too different to belong to the same species
 
     }
 
-    public static int calculateN(HashMap<Integer, ArrayList<Gene>> genes) {
-        int N = 0;
-        for (Integer key : genes.keySet()) {
-            N += genes.get(key).size();
-        }
-        return Math.max(N, 1); // For the initial case of when they're no genes
-    }
-    
     /*
      * Calculates output of neural network by following along connections and passing output from one node to the next
      */
