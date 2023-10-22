@@ -15,11 +15,13 @@ public class Genome {
     private static final Random RAND = new Random();
     public int score = 0; // Tells how well the genome does
     public double adjusted_score = 0;
+    public Neural_Constants constants;
 
     /*
      * Creates basic neural network with all the input nodes and output nodes, but no connections
      */
-    public Genome() {
+    public Genome(Neural_Constants constants) {
+        this.constants = constants;
         // Create the list of input/output neurons to begin with
         for (int n = 0; n < Neural_Constants.NUM_OF_INPUTS + Neural_Constants.NUM_OF_OUTPUTS; n++) {
             neurons.add(new Neuron(n, Neural_Constants.INPUT_OUTPUT_FUNCTION));
@@ -29,9 +31,10 @@ public class Genome {
     /*
      * Creates a genome, usually a copy of another genome
      */
-    public Genome(HashMap<Integer, ArrayList<Gene>> genes, ArrayList<Neuron> neurons) {
+    public Genome(HashMap<Integer, ArrayList<Gene>> genes, ArrayList<Neuron> neurons, Neural_Constants constants) {
         this.genes = genes;
         this.neurons = neurons;
+        this.constants = constants;
     }
 
     /*
@@ -43,7 +46,7 @@ public class Genome {
             // Pick a random starting node, and then a random ending node from the starting node list
             int start_identifier = new ArrayList<>(possible_connections.keySet()).get(RAND.nextInt(possible_connections.size()));
             int end_indentifier = possible_connections.get(start_identifier).get(RAND.nextInt(possible_connections.get(start_identifier).size()));
-            addConnection(start_identifier, end_indentifier, RAND.nextDouble(-Neural_Constants.DIFFERENTIAL / 2, Neural_Constants.DIFFERENTIAL / 2)); // Give an initial random weight
+            addConnection(start_identifier, end_indentifier, RAND.nextDouble(-constants.DIFFERENTIAL / 2, constants.DIFFERENTIAL / 2)); // Give an initial random weight
         }
     }
 
@@ -138,14 +141,16 @@ public class Genome {
         Genome copy = copy();
 
         // Calculate probabilities of mutation, then exectute mutation if the prob meets the threshold
-        double mutation = RAND.nextDouble();
-        if (mutation < Neural_Constants.MUTATE_ADD_CONNECTION) {
+        double mutate_connection = RAND.nextDouble();
+        double mutate_add_node = RAND.nextDouble();
+        double mutate_modify_weight = RAND.nextDouble();
+        if (mutate_connection < constants.MUTATE_ADD_CONNECTION) {
             copy.addRandomConnection();
         }
-        else if (mutation < Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
+        if (mutate_add_node < constants.MUTATE_ADD_NODE) {
             copy.addRandomNode();
         }
-        else if (mutation < Neural_Constants.MUTATE_MODIFY_WEIGHT + Neural_Constants.MUTATE_ADD_NODE + Neural_Constants.MUTATE_ADD_CONNECTION) {
+        if (mutate_modify_weight < constants.MUTATE_MODIFY_WEIGHT) {
             copy.mutateWeight();
         }
         return copy;
@@ -157,7 +162,7 @@ public class Genome {
     private void mutateWeight() {
         if (genes.size() != 0) {
             int random_starting_node = new ArrayList<>(genes.keySet()).get(RAND.nextInt(genes.keySet().size()));
-            genes.get(random_starting_node).get(RAND.nextInt(genes.get(random_starting_node).size())).weight += RAND.nextDouble(-Neural_Constants.DIFFERENTIAL / 2, Neural_Constants.DIFFERENTIAL / 2);
+            genes.get(random_starting_node).get(RAND.nextInt(genes.get(random_starting_node).size())).weight += RAND.nextDouble(-constants.DIFFERENTIAL / 2, constants.DIFFERENTIAL / 2);
         }
     }
 
@@ -166,7 +171,7 @@ public class Genome {
      */
     public Genome copy() {
         ArrayList<Neuron> copy_neurons = new ArrayList<>(neurons.stream().map(x -> x.copy()).toList());
-        return new Genome(copyGenes(), copy_neurons);
+        return new Genome(copyGenes(), copy_neurons, constants);
     }
 
     /*
@@ -222,7 +227,7 @@ public class Genome {
         else average_weight_diff = sum_diff_weight / similar_genes;
 
         // Then return if the score
-        if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * Neural_Constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * Neural_Constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
+        if (Neural_Constants.DIFFERENCE_THRESHOLD > disjoint_excess_genes * g1.constants.EXCESS_DISJOINT_COEFFICIENT + average_weight_diff * g1.constants.AVERAGE_WEIGHT_COEFFICIENT) return 1;
         else return 0; // Too different to belong to the same species
 
     }
@@ -302,6 +307,6 @@ public class Genome {
                 new_genes.put(start_node, new ArrayList<>(connected_nodes.stream().map(x -> x.copy()).toList()));
             }
         });
-        return new Genome(new_genes, g1.neurons);
+        return new Genome(new_genes, g1.neurons, g1.constants);
     }
 }

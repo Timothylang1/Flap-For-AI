@@ -20,9 +20,9 @@ public class NEAT {
      * Creates all birds and empty genomes. Since all the genomes are empty, they are the same, so we put them in a single species
      * that we also create to begin the game.
      */
-    public NEAT(PipeHandler pipes) {
+    public NEAT(PipeHandler pipes, Neural_Constants constants) {
         // First, create a new species to begin with
-        Genome gene = new Genome();
+        Genome gene = new Genome(constants);
         Bird bird = new Bird(pipes, gene);
         Species spec = new Species(gene);
         genomes.add(gene);
@@ -31,7 +31,7 @@ public class NEAT {
 
         // Then create the rest of the genomes and add it to the species
         for (int i = 0; i < Neural_Constants.POPULATION - 1; i++) {
-            gene = new Genome();
+            gene = new Genome(constants);
             bird = new Bird(pipes, gene);
             genomes.add(gene);
             birds.add(bird);
@@ -144,18 +144,19 @@ public class NEAT {
     public Genome getBest() {
         int maxScore = 0;
         Genome fittest_genome = null;
-        for (Genome genome : genomes) {
-            if (genome.score > maxScore) {
-                maxScore = genome.score;
-                fittest_genome = genome;
+        for (Bird bird : birds) {
+            if (bird.isAlive) { // If the bird is alive, then it hit the maximum score we want, so we automatically return that birds genome because it is the best
+                bird.gene.score = score;
+                return bird.gene;
+            }
+            if (bird.gene.score > maxScore) {
+                maxScore = bird.gene.score;
+                fittest_genome = bird.gene;
             }
         }
         return fittest_genome;
     }
 
-    /*
-     * 
-     */
     public int getNumSpecies() {
         return species.size();
     }

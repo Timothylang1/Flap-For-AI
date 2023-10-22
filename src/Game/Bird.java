@@ -3,7 +3,6 @@ package Game;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Image;
 import NEAT.Genome;
-import NEAT.Neural_Constants;
 
 /*
  * Main class that controls the bird
@@ -12,7 +11,7 @@ public class Bird extends Image {
 
     private double speed;
     private PipeHandler pipes;
-    private Genome gene;
+    public Genome gene;
     public boolean isAlive; // Tells if the bird is still alive
 
     public Bird(PipeHandler pipes, Genome gene) {
@@ -75,7 +74,7 @@ public class Bird extends Image {
      */
     private double[] getInputs() {
         // Create inputs
-        double[] inputs = new double[Neural_Constants.NUM_OF_MAX_INPUTS];
+        double[] inputs = new double[8];
         double[] pipe_locations_Y = pipes.getCurrentPipesY();
         double[] pipe_location_X = pipes.getCurrentPipesX();
         inputs[0] = getCenter().getY(); // Bird's Y Location

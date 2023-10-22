@@ -34,7 +34,7 @@ public class GraphVisual {
     }
 
     /**
-     * Uses Neural_Constants and sets up the initial layout 
+     * Uses constants and sets up the initial layout 
      * of input neurons and output neurons
      * @param n
      */

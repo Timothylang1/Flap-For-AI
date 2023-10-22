@@ -1,6 +1,7 @@
 import Game.*;
 import GraphVisualization.GraphVisual;
 import NEAT.NEAT;
+import NEAT.Neural_Constants;
 import edu.macalester.graphics.*;
 
 /*
@@ -11,8 +12,9 @@ public class Game {
     private final CanvasWindow canvas2 = new CanvasWindow("Neural Network", Constants.CANVAS2_WIDTH, Constants.CANVAS2_HEIGHT);
     private final PipeHandler pipes = new PipeHandler();
     private final Background back = new Background();
+    private final Neural_Constants constants = new Neural_Constants();
     private final Score score = new Score();
-    private final NEAT neat = new NEAT(pipes);
+    private final NEAT neat = new NEAT(pipes, constants);
     private final GraphVisual gv = new GraphVisual(canvas2);
     private boolean complete = false;
 
@@ -32,7 +34,7 @@ public class Game {
                     pipes.move();
 
                     // We've successfully completed the game if a bird reaches the max score, then we can close the game
-                    if (Constants.MAX_SCORE == score.score) {
+                    if (Neural_Constants.MAX_SCORE == score.score) {
                         restartGame();
                         canvas.closeWindow();
                         complete = true;
@@ -55,6 +57,7 @@ public class Game {
         back.reset();
         pipes.reset();
         gv.reset(neat.getBest().genes, neat.getNumSpecies(), score.score); // Updates the visualizer
+        System.out.println(neat.getBest().score);
         neat.reset();
         score.reset();
     }
