@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+
+import Game.Constants;
 
 /*
  * Handles interactions between genomes as well as store information about each gene within the genome
@@ -12,7 +13,6 @@ import java.util.Random;
 public class Genome {
     public HashMap<Integer, ArrayList<Gene>> genes = new HashMap<>();
     private ArrayList<Neuron> neurons = new ArrayList<>(); // Used to ensure no cycles in node connections
-    private static final Random RAND = new Random();
     public int score = 0; // Tells how well the genome does
     public double adjusted_score = 0;
     public Neural_Constants constants;
@@ -44,9 +44,9 @@ public class Genome {
         HashMap<Integer, ArrayList<Integer>> possible_connections = checkForPossibleConnections();
         if (possible_connections.size() != 0) { // As long as we can add a connection
             // Pick a random starting node, and then a random ending node from the starting node list
-            int start_identifier = new ArrayList<>(possible_connections.keySet()).get(RAND.nextInt(possible_connections.size()));
-            int end_indentifier = possible_connections.get(start_identifier).get(RAND.nextInt(possible_connections.get(start_identifier).size()));
-            addConnection(start_identifier, end_indentifier, RAND.nextDouble(-constants.DIFFERENTIAL / 2, constants.DIFFERENTIAL / 2)); // Give an initial random weight
+            int start_identifier = new ArrayList<>(possible_connections.keySet()).get(Neural_Constants.RAND.nextInt(possible_connections.size()));
+            int end_indentifier = possible_connections.get(start_identifier).get(Neural_Constants.RAND.nextInt(possible_connections.get(start_identifier).size()));
+            addConnection(start_identifier, end_indentifier, Neural_Constants.RAND.nextDouble(-constants.DIFFERENTIAL / 2, constants.DIFFERENTIAL / 2)); // Give an initial random weight
         }
     }
 
@@ -58,8 +58,8 @@ public class Genome {
         if (genes.isEmpty()) return;
 
         // If there are connections, pick a random one and break it
-        int start_identifier = new ArrayList<>(genes.keySet()).get(RAND.nextInt(genes.size()));
-        Gene to_break = genes.get(start_identifier).remove(RAND.nextInt(genes.get(start_identifier).size()));
+        int start_identifier = new ArrayList<>(genes.keySet()).get(Neural_Constants.RAND.nextInt(genes.size()));
+        Gene to_break = genes.get(start_identifier).remove(Neural_Constants.RAND.nextInt(genes.get(start_identifier).size()));
 
         // Then create new node and choose a random location to insert into the middle section of the list of nodes between the original initial node and the end node of the connection
         int start_index;
@@ -79,7 +79,7 @@ public class Genome {
 
         // The new node will be given a node_value equal to the number of nodes in the list, so each new node is unique
         int node_number = neurons.size();
-        neurons.add(RAND.nextInt(start_index, end_index), new Neuron(node_number, Neural_Constants.MIDDLE_FUNCTION));
+        neurons.add(Neural_Constants.RAND.nextInt(start_index, end_index), new Neuron(node_number, Neural_Constants.MIDDLE_FUNCTION));
 
         // Create connections to connect in new neuron
         // The weights are designed to maintain the original weight
@@ -141,9 +141,9 @@ public class Genome {
         Genome copy = copy();
 
         // Calculate probabilities of mutation, then exectute mutation if the prob meets the threshold
-        double mutate_connection = RAND.nextDouble();
-        double mutate_add_node = RAND.nextDouble();
-        double mutate_modify_weight = RAND.nextDouble();
+        double mutate_connection = Neural_Constants.RAND.nextDouble();
+        double mutate_add_node = Neural_Constants.RAND.nextDouble();
+        double mutate_modify_weight = Neural_Constants.RAND.nextDouble();
         if (mutate_connection < constants.MUTATE_ADD_CONNECTION) {
             copy.addRandomConnection();
         }
@@ -161,8 +161,8 @@ public class Genome {
      */
     private void mutateWeight() {
         if (genes.size() != 0) {
-            int random_starting_node = new ArrayList<>(genes.keySet()).get(RAND.nextInt(genes.keySet().size()));
-            genes.get(random_starting_node).get(RAND.nextInt(genes.get(random_starting_node).size())).weight += RAND.nextDouble(-constants.DIFFERENTIAL / 2, constants.DIFFERENTIAL / 2);
+            int random_starting_node = new ArrayList<>(genes.keySet()).get(Neural_Constants.RAND.nextInt(genes.keySet().size()));
+            genes.get(random_starting_node).get(Neural_Constants.RAND.nextInt(genes.get(random_starting_node).size())).weight += Neural_Constants.RAND.nextDouble(-constants.DIFFERENTIAL / 2, constants.DIFFERENTIAL / 2);
         }
     }
 
@@ -290,7 +290,7 @@ public class Genome {
                 // Next, we check how many matching end genes we have starting from this specific node
                 connected_nodes.forEach(end_node -> {
                     if (g2.genes.get(start_node).contains(end_node)) { // If we have a matching gene, then we pick randomly which one gets chosen
-                        if (RAND.nextInt() == 0) {
+                        if (Neural_Constants.RAND.nextInt() == 0) {
                             new_end_connect.add(g2.genes.get(start_node).get(g2.genes.get(start_node).indexOf(end_node)).copy()); // Take from g2 gene
                         }
                         else {

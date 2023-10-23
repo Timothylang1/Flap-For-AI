@@ -12,11 +12,11 @@ import edu.macalester.graphics.Point;
  */
 public class PipeHandler {
 
-    private final Random RAND = new Random();
     private GraphicsGroup pipes = new GraphicsGroup();
     private ArrayList<Image> pipe_images = new ArrayList<Image>();
     private int tracker = 0; // Tracks the indexes of the current pipes that the bird can interact with
-    
+    private static final Random RAND = new Random();
+
     public PipeHandler() {
         reset();
     }
@@ -75,14 +75,21 @@ public class PipeHandler {
         Image upperPipe = new Image(0, 0, "Final/Pipe.png");
         upperPipe.setScale(Constants.PIPE_SCALE);
         upperPipe.rotateBy(180);
-        double y_placement = RAND.nextDouble() * (Constants.UPPER_BACKGROUND_HEIGHT - Constants.VERTICAL_DISTANCE_BETWEEN_PIPES);
-        double x_placement = calculateX();
-        lowerPipe.setCenter(x_placement, y_placement + Constants.VERTICAL_DISTANCE_BETWEEN_PIPES + Constants.PIPE_HEIGHT / 2);
-        upperPipe.setCenter(x_placement, -Constants.PIPE_HEIGHT / 2 + y_placement);
+        calculatePlacement(lowerPipe, upperPipe);
         pipes.add(lowerPipe);
         pipes.add(upperPipe);
         pipe_images.add(lowerPipe);
         pipe_images.add(upperPipe);
+    }
+
+    /*
+     * Calculates placement of pipes
+     */
+    private void calculatePlacement(Image lower_pipe, Image upper_pipe) {
+        double y_placement = RAND.nextDouble() * (Constants.UPPER_BACKGROUND_HEIGHT - Constants.VERTICAL_DISTANCE_BETWEEN_PIPES);
+        double x_placement = calculateX();
+        lower_pipe.setCenter(x_placement, y_placement + Constants.VERTICAL_DISTANCE_BETWEEN_PIPES + Constants.PIPE_HEIGHT / 2);
+        upper_pipe.setCenter(x_placement, -Constants.PIPE_HEIGHT / 2 + y_placement);
     }
 
     /*
@@ -99,13 +106,15 @@ public class PipeHandler {
      * Moves all the pipes, and removes them as they move off the screen
      */
     public void move() {
+        pipe_images.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
         if (pipe_images.get(0).getCenter().getX() < -Constants.PIPE_WIDTH) {
-            pipes.remove(pipe_images.remove(0)); // Remove lower pipe
-            pipes.remove(pipe_images.remove(0)); // Remove upper pipe
-            createPipes();
+            Image lower_pipe = pipe_images.remove(0); // Remove lower pipe
+            Image upper_pipe = pipe_images.remove(0); // Remove upper pipe
+            calculatePlacement(lower_pipe, upper_pipe); // Calculate new placement
+            pipe_images.add(lower_pipe); // Add them back in, but at then end of the arraylist
+            pipe_images.add(upper_pipe);
             tracker -= 2; // Shifts the index by two
         }
-        pipe_images.forEach(x -> x.moveBy(-Constants.GAMESPEED, 0));
         // Updates which pipe is currently the potential one for birds to collide into. If the birds successfully cross, then we update the score
         if (pipe_images.get(tracker).getCenter().getX() + Constants.PIPE_WIDTH / 2 < Constants.STARTING_BIRD_X - Constants.BIRD_SIZE_X / 2) {
             tracker += 2; // Shift the index to the next series of pipes

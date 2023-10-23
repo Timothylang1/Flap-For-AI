@@ -2,7 +2,6 @@ package NEAT;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /*
  * Class that takes care of species, which is essentailly a list of genomes that are closely related to each other.
@@ -10,7 +9,6 @@ import java.util.Random;
 public class Species {
     private final Genome FOUNDATION; // The primary genome that will be used to see if potential genomes get added to this species
     private ArrayList<Genome> genomes = new ArrayList<>();
-    private static final Random RAND = new Random();
 
     /*
      * Takes in one genome as a foundation genome. This will be the one genome used to determine if a genome being added is similar enough to
@@ -79,7 +77,7 @@ public class Species {
      * Returns index of next genome to pick using roulette style
      */
     private int roulette(List<Integer> scores, int total_sum) {
-        double score = RAND.nextDouble() * total_sum;
+        double score = Neural_Constants.RAND.nextDouble() * total_sum;
         double tracker = 0;
         for (int i = 0; i < scores.size(); i++) {
             tracker += scores.get(i);

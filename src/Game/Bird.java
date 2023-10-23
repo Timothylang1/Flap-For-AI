@@ -14,11 +14,10 @@ public class Bird extends Image {
     public Genome gene;
     public boolean isAlive; // Tells if the bird is still alive
 
-    public Bird(PipeHandler pipes, Genome gene) {
+    public Bird(PipeHandler pipes) {
         super(0, 0, "Final/Bird.png");
         this.pipes = pipes;
         setScale(Constants.BIRD_SCALE);
-        reset(gene);
     }
 
     /*

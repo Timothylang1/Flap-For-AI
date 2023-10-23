@@ -1,4 +1,5 @@
 package Game;
+
 import edu.macalester.graphics.Image;
 
 /*

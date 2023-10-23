@@ -14,7 +14,7 @@ public class Game {
     private final Background back = new Background();
     private final Neural_Constants constants = new Neural_Constants();
     private final Score score = new Score();
-    private final NEAT neat = new NEAT(pipes, constants);
+    private final NEAT neat = new NEAT(pipes);
     private final GraphVisual gv = new GraphVisual(canvas2);
     private boolean complete = false;
 
@@ -26,6 +26,8 @@ public class Game {
         score.addScore(canvas);
         neat.addBirds(canvas);
 
+        neat.updateConstants(constants);
+
         canvas.animate(() -> {
             if (!complete) {
                 for (int i = 0; i < Constants.FRAMESPEEDSCALAR; i++) {
@@ -33,13 +35,15 @@ public class Game {
                     back.move();
                     pipes.move();
 
+                    // Update the score
+                    score.updateScore();
+
                     // We've successfully completed the game if a bird reaches the max score, then we can close the game
                     if (Neural_Constants.MAX_SCORE == score.score) {
                         restartGame();
                         canvas.closeWindow();
                         complete = true;
                     }
-                    score.updateScore();
 
                     // If all the birds have died (i.e. move returns false), then we reset the game and the neural networks
                     if (!neat.move()) {
@@ -57,7 +61,6 @@ public class Game {
         back.reset();
         pipes.reset();
         gv.reset(neat.getBest().genes, neat.getNumSpecies(), score.score); // Updates the visualizer
-        System.out.println(neat.getBest().score);
         neat.reset();
         score.reset();
     }

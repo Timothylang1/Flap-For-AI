@@ -7,7 +7,10 @@ import java.util.Random;
  * are shared across multiple classes.
  */
 public class Neural_Constants {
+
+    // One rand to rule them all
     public static final Random RAND = new Random();
+
     public static final int NUM_OF_VARIABLES = 6; // Number of variables we can change during our search
     public static final double CHANGE_DIFFERENCE = 0.01;
 
@@ -24,13 +27,13 @@ public class Neural_Constants {
     public static final int POPULATION = 100;
    
     // Max score
-    public static final int MAX_SCORE = 500;
+    public static final int MAX_SCORE = 200;
 
     
     // Chances of mutations 
     public double MUTATE_ADD_CONNECTION = 0.075;
-    public double MUTATE_ADD_NODE = 0.005;
-    public double MUTATE_MODIFY_WEIGHT = 0.075;
+    public double MUTATE_ADD_NODE = 0.002;
+    public double MUTATE_MODIFY_WEIGHT = 0.92;
 
     // Difference calculator
     public double DIFFERENTIAL = 1.0; // The range at which the neural network weights + biases can change during a mutation

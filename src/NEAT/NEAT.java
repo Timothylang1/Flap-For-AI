@@ -20,23 +20,29 @@ public class NEAT {
      * Creates all birds and empty genomes. Since all the genomes are empty, they are the same, so we put them in a single species
      * that we also create to begin the game.
      */
-    public NEAT(PipeHandler pipes, Neural_Constants constants) {
-        // First, create a new species to begin with
-        Genome gene = new Genome(constants);
-        Bird bird = new Bird(pipes, gene);
-        Species spec = new Species(gene);
-        genomes.add(gene);
-        birds.add(bird);
-        species.add(spec);
+    public NEAT(PipeHandler pipes) {
+        // Create all birds
+        for (int i = 0; i < Neural_Constants.POPULATION; i++) birds.add(new Bird(pipes));
+    }
+
+    /*
+     * Resets the NEAT to start over, but with different neural_constants
+     */
+    public void updateConstants(Neural_Constants constants) {
+        // Reset everything
+        species.clear();
+        genomes.clear();
+        score = 0;
 
         // Then create the rest of the genomes and add it to the species
-        for (int i = 0; i < Neural_Constants.POPULATION - 1; i++) {
-            gene = new Genome(constants);
-            bird = new Bird(pipes, gene);
+        for (int i = 0; i < Neural_Constants.POPULATION; i++) {
+            Genome gene = new Genome(constants);
             genomes.add(gene);
-            birds.add(bird);
-            spec.add(gene);
+            birds.get(i).reset(gene);
         }
+
+        // Then create the initial one species
+        createSpecies();
     }
 
     /*
