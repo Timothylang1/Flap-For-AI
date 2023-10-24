@@ -135,7 +135,7 @@ public class NEAT {
         int[] total_differences = new int[genomes.size()]; // Holds all of the total differences for all the genomes
         for (int g1 = 0; g1 < genomes.size(); g1++) {
             for (int g2 = g1; g2 < genomes.size(); g2++) {
-                int difference = Genome.similar(genomes.get(g1), genomes.get(g2));
+                int difference = genomes.get(g1).similar(genomes.get(g2));
                 total_differences[g1] += difference;
                 total_differences[g2] += difference;
             }

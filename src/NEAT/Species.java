@@ -2,6 +2,7 @@ package NEAT;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /*
  * Class that takes care of species, which is essentailly a list of genomes that are closely related to each other.
@@ -9,6 +10,7 @@ import java.util.List;
 public class Species {
     private final Genome FOUNDATION; // The primary genome that will be used to see if potential genomes get added to this species
     private ArrayList<Genome> genomes = new ArrayList<>();
+    private final Random RAND = new Random();
 
     /*
      * Takes in one genome as a foundation genome. This will be the one genome used to determine if a genome being added is similar enough to
@@ -51,8 +53,8 @@ public class Species {
             
             // Whichever genome has the better score gets priority during the crossover, so we pass that in first for the crossover
             Genome new_gene;
-            if (parents[i].score > parents[i - 1].score) new_gene = Genome.crossover(parents[i], parents[i - 1]);
-            else new_gene = Genome.crossover(parents[i - 1], parents[i]);
+            if (parents[i].score > parents[i - 1].score) new_gene = parents[i].crossover(parents[i - 1]);
+            else new_gene = parents[i - 1].crossover(parents[i]);
             children.add(new_gene.mutate());
             children.add(new_gene.mutate());
         }
@@ -66,7 +68,7 @@ public class Species {
      * Returns true if successfully added genome to the species
      */
     public boolean add(Genome to_add) {
-        if (Genome.similar(FOUNDATION, to_add) == 1) {
+        if (FOUNDATION.similar(to_add) == 1) {
             genomes.add(to_add);
             return true;
         }
@@ -77,7 +79,7 @@ public class Species {
      * Returns index of next genome to pick using roulette style
      */
     private int roulette(List<Integer> scores, int total_sum) {
-        double score = Neural_Constants.RAND.nextDouble() * total_sum;
+        double score = RAND.nextDouble() * total_sum;
         double tracker = 0;
         for (int i = 0; i < scores.size(); i++) {
             tracker += scores.get(i);

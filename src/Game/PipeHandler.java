@@ -15,7 +15,7 @@ public class PipeHandler {
     private GraphicsGroup pipes = new GraphicsGroup();
     private ArrayList<Image> pipe_images = new ArrayList<Image>();
     private int tracker = 0; // Tracks the indexes of the current pipes that the bird can interact with
-    private static final Random RAND = new Random();
+    private final Random RAND = new Random();
 
     public PipeHandler() {
         reset();

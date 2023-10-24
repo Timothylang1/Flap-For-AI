@@ -9,8 +9,8 @@ public class ThreadLogic implements Runnable {
     private final PipeHandler pipes = new PipeHandler();
     private final NEAT neat = new NEAT(pipes);
     private double current_pipe_location = Constants.PIPE_STARTING_LOCATION_X;
-    public int total_generations = 0;
-    private Neural_Constants constants;
+    public int total_generations = Integer.MAX_VALUE; // Takes care of initial case in ConstantFinder
+    public Neural_Constants constants;
 
     /*
      * Resets for the next round of a trial
@@ -24,7 +24,7 @@ public class ThreadLogic implements Runnable {
     /*
      * Updates the score
      */
-    public int updateScore(int score) {
+    private int updateScore(int score) {
         current_pipe_location -= Constants.GAMESPEED;
         if (current_pipe_location <= Constants.STARTING_BIRD_X) {
             current_pipe_location += Constants.HORIZONTAL_DISTANCE_BETWEEN_PIPES;
@@ -49,6 +49,7 @@ public class ThreadLogic implements Runnable {
         // For each trial
         for (int trial = 0; trial < ConstantsForFinder.NUM_OF_TRIALS; trial++) {
             
+            // Temporary counters
             int num_of_generations = 0;
             int score = 0;
 
@@ -62,9 +63,7 @@ public class ThreadLogic implements Runnable {
                 score = updateScore(score);
 
                 // We've successfully completed the game if a bird reaches the max score, then we can close the game
-                if (Neural_Constants.MAX_SCORE == score) {
-                    break;
-                }
+                if (Neural_Constants.MAX_SCORE == score) break;
 
                 // If all the birds have died (i.e. move returns false), then we reset the game and the neural networks
                 if (!neat.move()) {
@@ -81,17 +80,17 @@ public class ThreadLogic implements Runnable {
             // Resets neat for the trial
             neat.updateConstants(constants);
             pipes.reset();
-            System.out.println("Trial:\t" + Integer.toString(trial) + "\tGeneration:\t" + Integer.toString(num_of_generations));
         }
     }
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
         ThreadLogic thread = new ThreadLogic();
-        for (int i = 0; i < 3; i++) {
-            thread.reset(new Neural_Constants());
-            thread.run();
-            System.out.println("Average: " + Double.toString(thread.total_generations / (double) ConstantsForFinder.NUM_OF_TRIALS));
-        }
+        thread.reset(new Neural_Constants());
+        thread.run();
+        System.out.println("Average: " + Double.toString(thread.total_generations / (double) ConstantsForFinder.NUM_OF_TRIALS));
+        long finish = System.currentTimeMillis();
+        System.out.println(finish - start); // 5315
     }
 }
 

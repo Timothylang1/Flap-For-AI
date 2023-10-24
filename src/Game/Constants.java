@@ -8,7 +8,7 @@ import edu.macalester.graphics.Image;
 public class Constants {
     
     // Frame speed
-    public static final int FRAMESPEEDSCALAR = 10000; // Determines how fast the simulation runs
+    public static final int FRAMESPEEDSCALAR = 30; // Determines how fast the simulation runs
 
     // All variables related to the speed/hardness of the game
     public static final double GAMESPEED = 1.7; // How fast pipes are incoming
