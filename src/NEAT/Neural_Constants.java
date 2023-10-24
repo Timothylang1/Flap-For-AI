@@ -6,6 +6,7 @@ import java.util.Random;
 /*
  * Constants class. Any variable used in our code for the neural network ends up here to allow ease of adjustment and because these variables
  * are shared across multiple classes.
+ * IMPORATANT: NONE OF THE COEFFICIENTS CAN BE 0
  */
 public class Neural_Constants {
 
@@ -53,7 +54,7 @@ public class Neural_Constants {
     }
 
     private double calculateRandom() {
-        return CHANGE_DIFFERENCE * RAND.nextInt((int) (1 / CHANGE_DIFFERENCE));
+        return CHANGE_DIFFERENCE * Math.max(1, RAND.nextInt((int) (1 / CHANGE_DIFFERENCE)));
     }
 
     public Neural_Constants copy() {
@@ -76,27 +77,27 @@ public class Neural_Constants {
     public boolean modify(int to_change, int positive) {
         switch (to_change) {
             case 0: if (MUTATE_ADD_CONNECTION < 1.0 && positive == 1) MUTATE_ADD_CONNECTION += CHANGE_DIFFERENCE;
-                    else if (MUTATE_ADD_CONNECTION >= CHANGE_DIFFERENCE && positive == 0) MUTATE_ADD_CONNECTION -= CHANGE_DIFFERENCE;
+                    else if (MUTATE_ADD_CONNECTION >= CHANGE_DIFFERENCE * 2 && positive == 0) MUTATE_ADD_CONNECTION -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 1: if (MUTATE_ADD_NODE < 1.0 && positive == 1) MUTATE_ADD_NODE += CHANGE_DIFFERENCE;
-                    else if (MUTATE_ADD_NODE >= CHANGE_DIFFERENCE && positive == 0) MUTATE_ADD_NODE -= CHANGE_DIFFERENCE;
+                    else if (MUTATE_ADD_NODE >= CHANGE_DIFFERENCE * 2 && positive == 0) MUTATE_ADD_NODE -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 2: if (MUTATE_MODIFY_WEIGHT < 1.0 && positive == 1) MUTATE_MODIFY_WEIGHT += CHANGE_DIFFERENCE; 
-                    else if (MUTATE_MODIFY_WEIGHT >= CHANGE_DIFFERENCE && positive == 0) MUTATE_MODIFY_WEIGHT -= CHANGE_DIFFERENCE;
+                    else if (MUTATE_MODIFY_WEIGHT >= CHANGE_DIFFERENCE * 2 && positive == 0) MUTATE_MODIFY_WEIGHT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 3: if (positive == 1) DIFFERENTIAL += CHANGE_DIFFERENCE;
-                    else if (DIFFERENTIAL >= CHANGE_DIFFERENCE) DIFFERENTIAL -= CHANGE_DIFFERENCE;
+                    else if (DIFFERENTIAL >= CHANGE_DIFFERENCE * 2) DIFFERENTIAL -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 4: if (positive == 1) AVERAGE_WEIGHT_COEFFICIENT += CHANGE_DIFFERENCE;
-                    else if (AVERAGE_WEIGHT_COEFFICIENT >= CHANGE_DIFFERENCE) AVERAGE_WEIGHT_COEFFICIENT -= CHANGE_DIFFERENCE;
+                    else if (AVERAGE_WEIGHT_COEFFICIENT >= CHANGE_DIFFERENCE * 2) AVERAGE_WEIGHT_COEFFICIENT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 5: if (positive == 1) EXCESS_DISJOINT_COEFFICIENT += CHANGE_DIFFERENCE;
-                    else if (EXCESS_DISJOINT_COEFFICIENT >= CHANGE_DIFFERENCE) EXCESS_DISJOINT_COEFFICIENT -= CHANGE_DIFFERENCE;
+                    else if (EXCESS_DISJOINT_COEFFICIENT >= CHANGE_DIFFERENCE * 2) EXCESS_DISJOINT_COEFFICIENT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
         }
