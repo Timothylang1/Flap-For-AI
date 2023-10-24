@@ -53,8 +53,11 @@ public class Neural_Constants {
         EXCESS_DISJOINT_COEFFICIENT = calculateRandom();
     }
 
+    /*
+     * Creates a random value that's a scalar multiple of CHANGE_DIFFERENCE with the minimum being CHANGE_DIFFERENCE
+     */
     private double calculateRandom() {
-        return CHANGE_DIFFERENCE * Math.max(1, RAND.nextInt((int) (1 / CHANGE_DIFFERENCE)));
+        return CHANGE_DIFFERENCE * RAND.nextInt(1, (int) (1 / CHANGE_DIFFERENCE));
     }
 
     public Neural_Constants copy() {
