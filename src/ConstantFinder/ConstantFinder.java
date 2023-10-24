@@ -7,6 +7,7 @@ public class ConstantFinder {
     private ThreadLogic[] runnables = new ThreadLogic[Neural_Constants.NUM_OF_VARIABLES * 2];
     private Thread[] threads = new Thread[Neural_Constants.NUM_OF_VARIABLES * 2];
     private Neural_Constants best_constant;
+    private Neural_Constants previous_best;
     private int best_generation = Integer.MAX_VALUE; // To help handle with initial case
 
     public ConstantFinder() {
@@ -27,6 +28,7 @@ public class ConstantFinder {
     private void reset() {
         best_constant = new Neural_Constants();
         best_constant.randomize();
+        previous_best = best_constant;
         System.out.println(best_constant + "NA");
     }
 
@@ -37,7 +39,7 @@ public class ConstantFinder {
         // First, get the current constants, copy and modify them into the runnables, and run any runnables if nessecary
         for (int i = 0; i < threads.length; i++) {
             Neural_Constants neighbor = best_constant.copy();
-            if (neighbor.modify(i / 2, i % 2)) { // If we can modify it with this specific modification, then we need to run it
+            if (neighbor.modify(i / 2, i % 2) && !neighbor.equals(previous_best)) { // If we can modify it with this specific modification, then we need to run it
                 runnables[i].reset(neighbor); // Makes the runnable constants the new neighbor constants as well as resets the object
                 Thread thread = new Thread(runnables[i]); // Toss in the runnable into a new thread
                 thread.start(); // Start the thread
@@ -51,6 +53,9 @@ public class ConstantFinder {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Set the previous best to be the current generation
+        previous_best = best_constant;
 
         // Once all the threads are done, find the best score. The less generations it took, the better the score
         boolean found_better = false;

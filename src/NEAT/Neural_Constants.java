@@ -99,12 +99,21 @@ public class Neural_Constants {
                     else if (AVERAGE_WEIGHT_COEFFICIENT >= CHANGE_DIFFERENCE * 2) AVERAGE_WEIGHT_COEFFICIENT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
-            case 5: if (positive == 1) EXCESS_DISJOINT_COEFFICIENT += CHANGE_DIFFERENCE;
-                    else if (EXCESS_DISJOINT_COEFFICIENT >= CHANGE_DIFFERENCE * 2) EXCESS_DISJOINT_COEFFICIENT -= CHANGE_DIFFERENCE;
+            case 5: if (EXCESS_DISJOINT_COEFFICIENT < 1.0 && positive == 1) EXCESS_DISJOINT_COEFFICIENT += CHANGE_DIFFERENCE;
+                    else if (EXCESS_DISJOINT_COEFFICIENT >= CHANGE_DIFFERENCE * 2 && positive == 0) EXCESS_DISJOINT_COEFFICIENT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
         }
         return true;
+    }
+
+    public boolean equals(Neural_Constants constants) {
+        return Math.abs(constants.AVERAGE_WEIGHT_COEFFICIENT - AVERAGE_WEIGHT_COEFFICIENT) < CHANGE_DIFFERENCE / 100 && 
+        Math.abs(constants.DIFFERENTIAL - DIFFERENTIAL) < CHANGE_DIFFERENCE / 100 && 
+        Math.abs(constants.EXCESS_DISJOINT_COEFFICIENT - EXCESS_DISJOINT_COEFFICIENT) < CHANGE_DIFFERENCE / 100 &&
+        Math.abs(constants.MUTATE_ADD_CONNECTION - MUTATE_ADD_CONNECTION) < CHANGE_DIFFERENCE / 100 && 
+        Math.abs(constants.MUTATE_ADD_NODE - MUTATE_ADD_NODE) < CHANGE_DIFFERENCE / 100 && 
+        Math.abs(constants.MUTATE_MODIFY_WEIGHT - MUTATE_MODIFY_WEIGHT) < CHANGE_DIFFERENCE / 100;
     }
 
     @Override
