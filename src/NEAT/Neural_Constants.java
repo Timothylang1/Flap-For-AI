@@ -31,7 +31,7 @@ public class Neural_Constants {
     public static final int MAX_SCORE = 200;
 
     // Formatter
-    private static final DecimalFormat format = new DecimalFormat(".###");
+    public static final DecimalFormat format = new DecimalFormat(".###");
     
     // Chances of mutations 
     public double MUTATE_ADD_CONNECTION = 0.075;
@@ -39,7 +39,7 @@ public class Neural_Constants {
     public double MUTATE_MODIFY_WEIGHT = 0.92;
 
     // Difference calculator
-    public double DIFFERENTIAL = 1.0; // The range at which the neural network weights + biases can change during a mutation
+    public double DIFFERENTIAL = 1.0; // The range at which the neural network weights can change during a mutation
     public double AVERAGE_WEIGHT_COEFFICIENT = 0.5;
     public double EXCESS_DISJOINT_COEFFICIENT = 0.5;
 

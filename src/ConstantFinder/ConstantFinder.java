@@ -27,7 +27,7 @@ public class ConstantFinder {
     private void reset() {
         best_constant = new Neural_Constants();
         best_constant.randomize();
-        System.out.println(best_constant);
+        System.out.println(best_constant + "NA");
     }
 
     /*
@@ -67,7 +67,7 @@ public class ConstantFinder {
 
         // If one of the scores is better, than we restart the process again
         if (found_better) {
-            System.out.println(best_constant);
+            System.out.println(best_constant + Neural_Constants.format.format((double) best_generation / ConstantsForFinder.NUM_OF_TRIALS));
             round();
         }
         
