@@ -8,7 +8,7 @@ public class ConstantFinder {
     private Thread[] threads = new Thread[Neural_Constants.NUM_OF_VARIABLES * 2];
     private Neural_Constants best_constant;
     private Neural_Constants previous_best;
-    private int best_generation = Integer.MAX_VALUE; // To help handle with initial case
+    private int best_generation;
 
     public ConstantFinder() {
         // Create all the runnable objects starting at random points as well as filler threads (we will replace a majority of them)
@@ -17,9 +17,11 @@ public class ConstantFinder {
             threads[i] = new Thread();
         }
 
-        System.out.println("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations");
-        reset();
-        round(); // Does one round
+        while (true) {
+            System.out.println("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations");
+            reset();
+            round(); // Does one round
+        }
     }
 
     /*
@@ -29,7 +31,7 @@ public class ConstantFinder {
         best_constant = new Neural_Constants();
         best_constant.randomize();
         previous_best = best_constant;
-        System.out.println(best_constant + "NA");
+        best_generation = Integer.MAX_VALUE; // To help with initial case
     }
 
     /*
