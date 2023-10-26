@@ -1,10 +1,7 @@
 package ConstantFinder;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 import NEAT.Neural_Constants;
@@ -18,24 +15,21 @@ public class ConstantFinder {
     private Neural_Constants previous_best;
     private int best_generation;
     private File csvFile;
-    private StringBuilder builder;
     private CsvMaker csvMaker;
 
 
     public ConstantFinder() throws IOException{
         // Create all the runnable objects starting at random points as well as filler threads (we will replace a majority of them)
         csvFile = new File("./src/ConstantFinder/GenerationsData.csv");
-        builder = new StringBuilder();
-        csvMaker = new CsvMaker(csvFile, builder);
+        csvMaker = new CsvMaker(csvFile, new StringBuilder());
 
         for (int i = 0; i < runnables.length; i++) {
             runnables[i] = new ThreadLogic();
             threads[i] = new Thread();
         }
 
-        csvMaker.add_to_csv("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations");
-
         while (true) {
+            csvMaker.add_to_csv("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations");
             System.out.println("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations");
             reset();
             round(); // Does one round
