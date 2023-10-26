@@ -97,14 +97,6 @@ public class ConstantFinder {
         }
     }
 
-    /**
-     * Closes the FileWriter, allowing the CSV file to be written.
-     * @throws IOException
-     */
-    public void make_csv() throws IOException{
-        csvMaker.finish_csv();
-    }
-
 
     public static void main(String[] args) throws IOException {
         // Thread[] temp = new Thread[5];
@@ -129,6 +121,5 @@ public class ConstantFinder {
 
         // System.out.println("Final print statement");
         ConstantFinder constantFinder = new ConstantFinder(); // 2446.4
-        constantFinder.make_csv();
     }
 }
