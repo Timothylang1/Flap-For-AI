@@ -1,6 +1,14 @@
 package ConstantFinder;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
 import NEAT.Neural_Constants;
+
 
 public class ConstantFinder {
     
@@ -9,13 +17,23 @@ public class ConstantFinder {
     private Neural_Constants best_constant;
     private Neural_Constants previous_best;
     private int best_generation;
+    private File csvFile;
+    private StringBuilder builder;
+    private CsvMaker csvMaker;
 
-    public ConstantFinder() {
+
+    public ConstantFinder() throws IOException{
         // Create all the runnable objects starting at random points as well as filler threads (we will replace a majority of them)
+        csvFile = new File("./src/ConstantFinder/GenerationsData.csv");
+        builder = new StringBuilder();
+        csvMaker = new CsvMaker(csvFile, builder);
+
         for (int i = 0; i < runnables.length; i++) {
             runnables[i] = new ThreadLogic();
             threads[i] = new Thread();
         }
+
+        csvMaker.add_to_csv("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations");
 
         while (true) {
             System.out.println("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations");
@@ -37,7 +55,7 @@ public class ConstantFinder {
     /*
      * Recursive method that keeps calling itself until we find a local maximum or absolute maximum
      */
-    private void round() {
+    private void round() throws IOException{
         // First, get the current constants, copy and modify them into the runnables, and run any runnables if nessecary
         for (int i = 0; i < threads.length; i++) {
             Neural_Constants neighbor = best_constant.copy();
@@ -75,6 +93,7 @@ public class ConstantFinder {
         // If one of the scores is better, than we restart the process again
         if (found_better) {
             System.out.println(best_constant + Neural_Constants.format.format((double) best_generation / ConstantsForFinder.NUM_OF_TRIALS));
+            csvMaker.add_to_csv(best_constant + Neural_Constants.format.format((double) best_generation / ConstantsForFinder.NUM_OF_TRIALS));
             round();
         }
         
@@ -84,8 +103,16 @@ public class ConstantFinder {
         }
     }
 
+    /**
+     * Closes the FileWriter, allowing the CSV file to be written.
+     * @throws IOException
+     */
+    public void make_csv() throws IOException{
+        csvMaker.finish_csv();
+    }
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
         // Thread[] temp = new Thread[5];
         // for (int i = 0; i < 5; i++) {
         //     Thread thread = new Thread(new Runnable() {
@@ -107,6 +134,7 @@ public class ConstantFinder {
         // } catch (Exception e) {e.printStackTrace();}
 
         // System.out.println("Final print statement");
-        new ConstantFinder(); // 2446.4
+        ConstantFinder constantFinder = new ConstantFinder(); // 2446.4
+        constantFinder.make_csv();
     }
 }
