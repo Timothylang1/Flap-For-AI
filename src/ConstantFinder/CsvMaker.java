@@ -12,7 +12,7 @@ public class CsvMaker {
 
 
     public CsvMaker() {
-        File csvFile = new File("./src/ConstantFinder/GenerationsData.csv");
+        File csvFile = new File("./src/ConstantFinder/Data/GenerationsData1.csv");
         try {
             fileWriter = new FileWriter(csvFile, false);
         }
