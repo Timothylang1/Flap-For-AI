@@ -80,15 +80,15 @@ public class Neural_Constants {
     public boolean modify(int to_change, int positive) {
         switch (to_change) {
             case 0: if (MUTATE_ADD_CONNECTION < 1.0 && positive == 1) MUTATE_ADD_CONNECTION += CHANGE_DIFFERENCE;
-                    else if (MUTATE_ADD_CONNECTION >= CHANGE_DIFFERENCE * 2 && positive == 0) MUTATE_ADD_CONNECTION -= CHANGE_DIFFERENCE;
+                    else if (MUTATE_ADD_CONNECTION >= CHANGE_DIFFERENCE && positive == 0) MUTATE_ADD_CONNECTION -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 1: if (MUTATE_ADD_NODE < 1.0 && positive == 1) MUTATE_ADD_NODE += CHANGE_DIFFERENCE;
-                    else if (MUTATE_ADD_NODE >= CHANGE_DIFFERENCE * 2 && positive == 0) MUTATE_ADD_NODE -= CHANGE_DIFFERENCE;
+                    else if (MUTATE_ADD_NODE >= CHANGE_DIFFERENCE && positive == 0) MUTATE_ADD_NODE -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 2: if (MUTATE_MODIFY_WEIGHT < 1.0 && positive == 1) MUTATE_MODIFY_WEIGHT += CHANGE_DIFFERENCE; 
-                    else if (MUTATE_MODIFY_WEIGHT >= CHANGE_DIFFERENCE * 2 && positive == 0) MUTATE_MODIFY_WEIGHT -= CHANGE_DIFFERENCE;
+                    else if (MUTATE_MODIFY_WEIGHT >= CHANGE_DIFFERENCE && positive == 0) MUTATE_MODIFY_WEIGHT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 3: if (positive == 1) DIFFERENTIAL += CHANGE_DIFFERENCE;
@@ -96,24 +96,15 @@ public class Neural_Constants {
                     else return false;
                     break;
             case 4: if (positive == 1) AVERAGE_WEIGHT_COEFFICIENT += CHANGE_DIFFERENCE;
-                    else if (AVERAGE_WEIGHT_COEFFICIENT >= CHANGE_DIFFERENCE * 2) AVERAGE_WEIGHT_COEFFICIENT -= CHANGE_DIFFERENCE;
+                    else if (AVERAGE_WEIGHT_COEFFICIENT >= CHANGE_DIFFERENCE) AVERAGE_WEIGHT_COEFFICIENT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
             case 5: if (EXCESS_DISJOINT_COEFFICIENT < 1.0 && positive == 1) EXCESS_DISJOINT_COEFFICIENT += CHANGE_DIFFERENCE;
-                    else if (EXCESS_DISJOINT_COEFFICIENT >= CHANGE_DIFFERENCE * 2 && positive == 0) EXCESS_DISJOINT_COEFFICIENT -= CHANGE_DIFFERENCE;
+                    else if (EXCESS_DISJOINT_COEFFICIENT >= CHANGE_DIFFERENCE && positive == 0) EXCESS_DISJOINT_COEFFICIENT -= CHANGE_DIFFERENCE;
                     else return false;
                     break;
         }
         return true;
-    }
-
-    public boolean equals(Neural_Constants constants) {
-        return Math.abs(constants.AVERAGE_WEIGHT_COEFFICIENT - AVERAGE_WEIGHT_COEFFICIENT) < CHANGE_DIFFERENCE / 100 && 
-        Math.abs(constants.DIFFERENTIAL - DIFFERENTIAL) < CHANGE_DIFFERENCE / 100 && 
-        Math.abs(constants.EXCESS_DISJOINT_COEFFICIENT - EXCESS_DISJOINT_COEFFICIENT) < CHANGE_DIFFERENCE / 100 &&
-        Math.abs(constants.MUTATE_ADD_CONNECTION - MUTATE_ADD_CONNECTION) < CHANGE_DIFFERENCE / 100 && 
-        Math.abs(constants.MUTATE_ADD_NODE - MUTATE_ADD_NODE) < CHANGE_DIFFERENCE / 100 && 
-        Math.abs(constants.MUTATE_MODIFY_WEIGHT - MUTATE_MODIFY_WEIGHT) < CHANGE_DIFFERENCE / 100;
     }
 
     @Override
@@ -125,12 +116,5 @@ public class Neural_Constants {
         format.format(DIFFERENTIAL) + "\t" + 
         format.format(AVERAGE_WEIGHT_COEFFICIENT) + "\t" +  
         format.format(EXCESS_DISJOINT_COEFFICIENT) + "\t";
-    }
-
-    public static void main(String[] args) {
-        Neural_Constants constants = new Neural_Constants();
-        constants.randomize();
-        System.out.println("Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess");
-        System.out.println(constants);
     }
 }

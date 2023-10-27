@@ -8,34 +8,36 @@ import java.io.IOException;
 public class CsvMaker {
     private FileWriter fileWriter;
     private BufferedWriter buffWriter;
-    private StringBuilder builder;
+    private StringBuilder builder = new StringBuilder();
 
 
-    CsvMaker(File csvFile, StringBuilder builder) throws IOException{
-        fileWriter = new FileWriter(csvFile, true);
+    public CsvMaker() {
+        File csvFile = new File("./src/ConstantFinder/GenerationsData.csv");
+        try {
+            fileWriter = new FileWriter(csvFile, false);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         buffWriter = new BufferedWriter(fileWriter);
-        this.builder = builder;
     }
 
-    public void add_to_csv(String text) throws IOException{
+    public void add_to_csv(String text) {
         builder.append(text.replace("\t", ","));
+        try {
+            buffWriter.append(builder.subSequence(0, builder.length()));
+            buffWriter.newLine();
 
-        buffWriter.append(builder.subSequence(0, builder.length()));
-        buffWriter.newLine();
-
-        builder.delete(0, builder.length());
-        buffWriter.flush();
-        // System.out.println("Added to CSV!");
+            builder.delete(0, builder.length());
+            buffWriter.flush();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws IOException {
-        String numbers = "0.0\t1.0\t2.0\t3.0\t4.0\t5.0\t6.0";
-
-
-        File csvFile = new File("./src/ConstantFinder/GenerationsData.csv");
-        // FileWriter fileWriter = new FileWriter(csvFile);
-        StringBuilder builder = new StringBuilder();
-
+        // String numbers = "0.0\t1.0\t2.0\t3.0\t4.0\t5.0\t6.0";
 
         String text = "Add C\tAdd N\tMod Wgt\tDiff\tAvg. W\tExcess\tAverage generations";
         
@@ -45,7 +47,7 @@ public class CsvMaker {
         // fileWriter.append("\n");
 
         // builder.delete(0, builder.length());
-        CsvMaker test = new CsvMaker(csvFile, builder);
+        CsvMaker test = new CsvMaker();
         test.add_to_csv(text);
         test.add_to_csv(text);
         

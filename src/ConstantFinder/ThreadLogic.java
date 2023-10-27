@@ -11,6 +11,7 @@ public class ThreadLogic implements Runnable {
     private double current_pipe_location = Constants.PIPE_STARTING_LOCATION_X;
     public int total_generations = Integer.MAX_VALUE; // Takes care of initial case in ConstantFinder
     public Neural_Constants constants;
+    public boolean active = false; // Tells if this runnable was used in the most recent generations
 
     /*
      * Resets for the next round of a trial
@@ -42,6 +43,7 @@ public class ThreadLogic implements Runnable {
         total_generations = 0;
         neat.updateConstants(constants);
         pipes.reset();
+        active = true; // Sets this runnable status to active
     }
 
     @Override
