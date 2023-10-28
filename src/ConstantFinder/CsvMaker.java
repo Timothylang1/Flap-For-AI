@@ -49,7 +49,7 @@ public class CsvMaker {
     /**
      * Reads through all the GenerationsDataN.csv files
      * 
-     * @return a list of a list of row data
+     * @return a list simulations, where each simulation has a list of row data
      */
     public static ArrayList<ArrayList<HashMap<String, Double>>> read_csv_files() {
         String pathName = "src/ConstantFinder/Data (2000 trials, Max Gen 30, Num Inputs 3)/";
@@ -125,9 +125,8 @@ public class CsvMaker {
         // test.add_to_csv(text);
 
         HashMap<String, Double> map = new HashMap<String, Double>();
-        String pathName = "src/ConstantFinder/Data (2000 trials, Max Gen 30, Num Inputs 3)/";
-        String fileName = "GenerationsData20.csv";
-        read_csv(pathName + fileName);
+
+        System.out.println(read_csv_files().size());
     
 
 
