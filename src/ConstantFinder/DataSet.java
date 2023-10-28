@@ -19,20 +19,7 @@ public class DataSet {
     public static final String GENERATION_KEY = "Average generations";
     public static double scale_line;
     public static double scale_circle_color;
-    public Ellipse final_point = new Ellipse(0, 0, 10, 10);
-
-    // Comparator used for sorting data
-    private static final Comparator<Entry<String, Double>> compare = new Comparator<Entry<String, Double>>() {
-        @Override
-        public int compare(Entry<String, Double> arg0, Entry<String, Double> arg1) {
-            // If they're roughly the same, then we compare the strings to try and maintain some consistency
-            if (Math.abs(arg0.getValue() - arg1.getValue()) < Neural_Constants.CHANGE_DIFFERENCE / 100) {
-                return arg0.getKey().compareTo(arg1.getKey());
-            }
-            else if (arg0.getValue() < arg1.getValue()) return 1;
-            else return -1;
-        }
-    };
+    public Ellipse final_point = new Ellipse(0, 0, 15, 15);
 
     public DataSet(ArrayList<HashMap<String, Double>> data, CanvasWindow canvas) {
         this.data = data;
@@ -44,7 +31,6 @@ public class DataSet {
             vectorSet.put(key, vector);
             canvas.add(vector);
         }
-        canvas.add(final_point);
     }
 
     public boolean update(int current_number) {
@@ -53,7 +39,7 @@ public class DataSet {
         HashMap<String, Double> weights = data.get(current_number);
 
         // Sort the weights and then update vectors in order of sorted weights. We also remove the generation key because that isn't a parameter
-        List<Entry<String, Double>> sorted_entries = weights.entrySet().stream().filter(x -> VisualizeConstants.keySet.contains(x.getKey())).sorted(compare).toList();
+        List<Entry<String, Double>> sorted_entries = weights.entrySet().stream().filter(x -> VisualizeConstants.keySet.contains(x.getKey())).toList();
         Point previous_location = new Point(VisualizeConstants.CANVAS_SIZE / 2, VisualizeConstants.CANVAS_SIZE / 2);
         for (Entry<String, Double> entry : sorted_entries) {
 
@@ -74,7 +60,8 @@ public class DataSet {
         // Whatever the last location is, we update the final ellipse to have that location and then scale it based on the weight
         // The darker the color, the better the average generation
         final_point.setCenter(previous_location);
-        final_point.setFillColor(new Color((int) (255 - weights.get(GENERATION_KEY) * scale_circle_color)));
+        int calculated_grey_scale = (int) ((weights.get(GENERATION_KEY) - VisualizeConstants.min_generations) * scale_circle_color);
+        final_point.setFillColor(new Color(calculated_grey_scale, calculated_grey_scale, calculated_grey_scale));
 
         // Return true because successfully ran
         return true;

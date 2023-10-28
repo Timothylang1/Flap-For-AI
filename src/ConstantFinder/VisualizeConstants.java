@@ -12,18 +12,22 @@ import edu.macalester.graphics.ui.Button;
 
 public class VisualizeConstants {
     public static final int CANVAS_SIZE = 800;
-    public static final int CANVAS_WIDTH = 900;
+    public static final int CANVAS_WIDTH = 1000;
     private CanvasWindow canvas = new CanvasWindow("Constants", CANVAS_WIDTH, CANVAS_SIZE);
-    private CsvMaker csv = new CsvMaker();
     private ArrayList<DataSet> dataHolders = new ArrayList<>();
     public static ArrayList<String> keySet;
-    private int current_run = 0;
+    private double current_run = 0;
     private GraphicsGroup border = new GraphicsGroup();
+    private boolean play;
+    private double speed = 0.1; // How fast the canvas updates
+    public static double min_generations;
 
     /*
      * IMPORTANT: DO NOT SWAP THE ORDER OF THESE METHODS
      */
-    public VisualizeConstants(ArrayList<ArrayList<HashMap<String, Double>>> data) {
+    public VisualizeConstants() {
+        ArrayList<ArrayList<HashMap<String, Double>>> data = CsvMaker.read_csv_files();
+        
         // Get all the keys
         keySet = new ArrayList<>(data.get(0).get(0).keySet());
         keySet.remove(DataSet.GENERATION_KEY);
@@ -33,6 +37,9 @@ public class VisualizeConstants {
 
         // Then create data objects
         data.forEach(x -> dataHolders.add(new DataSet(x, canvas)));
+
+        // Add in the final circles last so that they are above everything else
+        dataHolders.forEach(x -> canvas.add(x.final_point));
 
         // Add in button objects
         for (int i = 0; i < keySet.size(); i++) {
@@ -63,15 +70,41 @@ public class VisualizeConstants {
             canvas.add(button);
         };
 
+        // Add in other buttons
+        Button reset_button = new Button("Reset");
+        reset_button.setPosition(CANVAS_SIZE + 100, 0);
+        reset_button.onClick(this::reset);
+        canvas.add(reset_button);
+
+        Button pause_button = new Button("Pause");
+        pause_button.setPosition(CANVAS_SIZE + 100, 30);
+        pause_button.onClick(() -> {play = false;});
+        canvas.add(pause_button);
+
+        Button play_button = new Button("Play");
+        play_button.setPosition(CANVAS_SIZE + 100, 60);
+        play_button.onClick(() -> {play = true;});
+        canvas.add(play_button);
+
         // Setup visual elements + line scale
         reset();
         
         // Setup max generation
         double max_generations = data.stream().mapToDouble(x -> x.stream().mapToDouble(y -> y.get(DataSet.GENERATION_KEY)).max().getAsDouble()).max().getAsDouble();
-        DataSet.scale_circle_color = 255 / max_generations;
+        min_generations = data.stream().mapToDouble(x -> x.stream().mapToDouble(y -> y.get(DataSet.GENERATION_KEY)).min().getAsDouble()).min().getAsDouble();
+        DataSet.scale_circle_color = 255 / (max_generations - min_generations);
+        System.out.println(DataSet.scale_circle_color);
 
         // Update the visual to hold the inital dataset
         update();
+
+        // Animate the canvas
+        canvas.animate(() -> {
+            if (play) {
+                current_run += speed;
+                update();
+            }
+        });
     }
 
     private void reset() {
@@ -116,32 +149,21 @@ public class VisualizeConstants {
         double current_angle = (((keySet.size() / 2 + 1) - 2) * 180 - ((keySet.size() - 2) * 180.0 / keySet.size()) * (keySet.size() / 2 - 1)) / 2; // Calculates starting angle
         for (int i = 0; i < keySet.size() / 2; i++) {
             scale_line += Math.abs(Math.cos(current_angle * Math.PI / 180));
-            System.out.println(current_angle);
             current_angle += (keySet.size() - 2) * 180.0 / keySet.size();
         }
         DataSet.scale_line = ((CANVAS_SIZE - 40) / 2) / scale_line;
+
+        // Stops the animation
+        play = false;
     }
 
     private void update() {
         for (DataSet dataset : dataHolders) {
-            dataset.update(current_run);
+            dataset.update((int) current_run);
         }
-        current_run += 1;
     }
 
     public static void main(String[] args) {
-        ArrayList<ArrayList<HashMap<String, Double>>> data = new ArrayList<>();
-        ArrayList<HashMap<String, Double>> example = new ArrayList<>();
-        HashMap<String, Double> test = new HashMap<>();
-        example.add(test);
-        data.add(example);
-        test.put("Add C", 0.1);
-        test.put("Add N", 1.0);
-        test.put("Mod Wgt", 0.2);
-        test.put("Diff", 1.0);
-        test.put("Avg. W", 0.0);
-        test.put("Excess", 1.0);
-        test.put("Average generations", 5.078);
-        new VisualizeConstants(data);
+        new VisualizeConstants();
     }
 }
