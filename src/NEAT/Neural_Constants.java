@@ -16,7 +16,7 @@ public class Neural_Constants {
     public static final int NUM_OF_VARIABLES = 6; // Number of variables we can change during our search
     public static final double CHANGE_DIFFERENCE = 0.05; // How much those variables can change by each trial
 
-    public static final int NUM_OF_INPUTS = 3; // Total number of inputs to the neural network
+    public static final int NUM_OF_INPUTS = 8; // Total number of inputs to the neural network
     public static final int NUM_OF_OUTPUTS = 2; // Total number of outputs (node 1 represents jump, node 2 represents not jump)
 
     public static final ActivationFunction MIDDLE_FUNCTION = x -> Math.max(0, x);
