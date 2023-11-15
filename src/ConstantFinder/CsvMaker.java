@@ -22,7 +22,7 @@ public class CsvMaker {
 
 
     public CsvMaker() {
-        File csvFile = new File("./src/ConstantFinder/Data/GenerationsData_1.csv");
+        File csvFile = new File("./src/ConstantFinder/Data (2000 trials, Max Gen 150, Num Inputs 8)/GenerationsData0.csv");
         try {
             fileWriter = new FileWriter(csvFile, false);
         }
