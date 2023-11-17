@@ -16,7 +16,7 @@ public class Neural_Constants {
     public static final int NUM_OF_VARIABLES = 6; // Number of variables we can change during our search
     public static final double CHANGE_DIFFERENCE = 0.05; // How much those variables can change by each trial
 
-    public static final int NUM_OF_INPUTS = 8; // Total number of inputs to the neural network
+    public static final int NUM_OF_INPUTS = 3; // Total number of inputs to the neural network
     public static final int NUM_OF_OUTPUTS = 2; // Total number of outputs (node 1 represents jump, node 2 represents not jump)
 
     public static final ActivationFunction MIDDLE_FUNCTION = x -> Math.max(0, x);
@@ -35,14 +35,14 @@ public class Neural_Constants {
     public static final DecimalFormat format = new DecimalFormat(".###");
     
     // Chances of mutations 
-    public double MUTATE_ADD_CONNECTION = 0.075;
-    public double MUTATE_ADD_NODE = 0.002;
-    public double MUTATE_MODIFY_WEIGHT = 0.92;
+    public double MUTATE_ADD_CONNECTION = 1.0;
+    public double MUTATE_ADD_NODE = 0;
+    public double MUTATE_MODIFY_WEIGHT = 0.9;
 
     // Difference calculator
     public double DIFFERENTIAL = 1.0; // The range at which the neural network weights can change during a mutation
     public double AVERAGE_WEIGHT_COEFFICIENT = 0.5;
-    public double EXCESS_DISJOINT_COEFFICIENT = 0.5;
+    public double EXCESS_DISJOINT_COEFFICIENT = 0.1;
 
     public void randomize() {
         MUTATE_ADD_CONNECTION = calculateRandom();
