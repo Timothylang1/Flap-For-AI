@@ -40,8 +40,8 @@ public class InfoText extends GraphicsGroup {
 
     public void update(int species, int score) {
         // Update the current generation
-        generation.setText(Integer.toString(generation_num));
         generation_num += 1;
+        generation.setText(Integer.toString(generation_num));
 
         // Update the number of species
         num_of_species.setText(Integer.toString(species));
