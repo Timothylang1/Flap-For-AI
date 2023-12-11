@@ -22,7 +22,7 @@ public class GraphEdge extends Line{
         } else {
             setStrokeColor(new Color((float) 1.0, 0, 0, (float) (SCALE_OPACITY * weight)));
         }
-        edges.add(this);
+        edges.add(this);        
     }
 
     public static void reset() {

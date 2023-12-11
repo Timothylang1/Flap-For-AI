@@ -87,7 +87,7 @@ public class Species {
                 return i;
             }
         }
-        return scores.size() - 1; // On the off chance of weird rounding errors, we return the last index
+        return scores.size() - 1; // On the off chance of weird rounding errors (RAND.nextDouble could hit 0.999 repeating), we return the last index
 
     }
 }

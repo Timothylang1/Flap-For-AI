@@ -66,7 +66,7 @@ public class Genome {
         int end_index;
         for (start_index = 0; start_index < neurons.size(); start_index++) {
             if (neurons.get(start_index).IDENTIFIER == start_identifier) {
-                start_index = Math.max(start_index + 1, Neural_Constants.NUM_OF_INPUTS); // If the starting index is a initial node, we can't place the new node inbetween the inital nodes, so we limit the min the start_index can be
+                start_index = Math.max(start_index + 1, Neural_Constants.NUM_OF_INPUTS); // If the starting index is a input layer node, we can't place the new node inbetween the inital nodes, so we limit the min the start_index can be
                 break;
             };
         }
@@ -97,7 +97,7 @@ public class Genome {
 
     /*
      * Returns a hashmap of all possible connections still available
-     * RULES: initial nodes can't connect to each other, and output nodes can't send their outputs to other nodes. Also,
+     * RULES: Input Layer nodes can't connect to each other, and output nodes can't send their outputs to other nodes. Also,
      * the connections have to flow in the direction of the neural_network list to avoid cycles
      * KEY: IDENTIFIER of start_neuron
      * VALUES: IDENTIFIER of all non-connected neurons to start
@@ -127,14 +127,16 @@ public class Genome {
                     to_connect.add(end_neuron.IDENTIFIER);
                 }
             }
-            if (to_connect.size() != 0) possible_connections.put(start_neuron, to_connect); // If there are possible conneticons, we add to the list
+            if (to_connect.size() != 0) possible_connections.put(start_neuron, to_connect); // If there are possible connections, we add to the list
         }
         return possible_connections;
     }
 
     /*
      * Creates a copy of this genome, then returns it but mutated slightly if chance or fate allows for it
-     * NOTE: ONLY ONE MUTATION ALLOWED
+     * NOTE: A total of 3 mutations are possible for one genome. 
+     *      The genome can add connection, add node, and modify 
+     *      weight all in one mutation.
      */
     public Genome mutate() {
         // Create copy genome
@@ -236,7 +238,7 @@ public class Genome {
      * Calculates output of neural network by following along connections and passing output from one node to the next
      */
     public double[] output(double[] initial_inputs) {    
-        // First create helper temporary hashmap
+        // First create temporary helper hashmap
         HashMap<Integer, Double> inputs = new HashMap<>(); // KEY: the IDENTIFIER of the neuron, VALUE: the input for that neuron when the time is right
 
         // Second, add the inputs to the initial nodes
@@ -278,7 +280,7 @@ public class Genome {
     /*
      * Takes the most successful Genome and crossover with second genome. Crossover only looks at matching genes and picks randomly
      * between genes that match
-     * IMPORTANT: THE FIRST GENOME PASSED IN MUST HAVE A HIGHER SCORE SO IT'S PERSERVED during the crossover
+     * IMPORTANT: THE GENOME CALLING THIS METHOD MUST HAVE A HIGHER SCORE THAN THE GENOME GETTING PASSED IN SO IT'S PERSERVED during the crossover
      */
     public Genome crossover(Genome g2) {
         HashMap<Integer, ArrayList<Gene>> new_genes = new HashMap<>();
@@ -298,7 +300,7 @@ public class Genome {
                         }
                     }
                     else {
-                        new_end_connect.add(end_node.copy()); // If this gene doesn't have any matches in g2, then we just take it and copy it in
+                        new_end_connect.add(end_node.copy()); // If this gene doesn't have any matches in g2 (i.e disjoint gene), then we just take it and copy it in
                     }
                 });
                 new_genes.put(start_node, new_end_connect);
@@ -307,6 +309,10 @@ public class Genome {
                 new_genes.put(start_node, new ArrayList<>(connected_nodes.stream().map(x -> x.copy()).toList()));
             }
         });
+
+        // Since genome 1 is more fit than genome 2, disjoint genes 
+        // belonging in genome 2 are not added to new_genes, thus we
+        // also use genome 1's neuron list and neural constants.
         return new Genome(new_genes, neurons, constants);
     }
 }
